@@ -6,14 +6,185 @@
     <title>BTC DK Mining</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for new elements */
+        .mining-timer {
+            background: rgba(247, 147, 26, 0.1);
+            border: 2px solid rgba(247, 147, 26, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #f7931a;
+        }
+        
+        .upgrade-note {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+            color: #ffd700;
+        }
+        
+        .cost-label {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #f7931a;
+        }
+        
+        .cost {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .payment-info {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .address-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .copy-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .warning {
+            color: #e74c3c;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(247, 147, 26, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #f7931a;
+        }
+        
+        .fee-note {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #f7931a;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .status.pending {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: #777;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Button states */
+        .btn-main:disabled,
+        .btn-upgrade:disabled,
+        .btn-withdraw:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .balance {
+                font-size: 20px;
+            }
+            
+            .tab {
+                font-size: 12px;
+                padding: 10px 5px;
+            }
+            
+            .mining-timer {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>⛏️ BTC Miner</h1>
+            <h1>⛏️ BTC DK Mining</h1>
             <div class="balance">
-                <span id="balance">0.000000001</span> BTC
+                Balance: <span id="balance">0.000000001</span> BTC
             </div>
         </div>
         
@@ -29,13 +200,15 @@
             <!-- Mining Tab -->
             <div id="mining-tab" class="tab-pane active">
                 <div class="mining-stats">
-                    <p>Mining Speed: <span id="mining-speed">9s</span> per 0.000000001 BTC</p>
-                    <p>Total Mined: <span id="total-mined">0.000000001</span> BTC</p>
+                    <p>⏱️ Speed: <span id="mining-speed">9s</span> per cycle</p>
+                    <p>📊 Total Mined: <span id="total-mined">0.000000001</span> BTC</p>
+                    <p>⚡ Speed Level: <span id="speed-level-display">0</span>/10</p>
+                    <p>💎 Efficiency Level: <span id="efficiency-level-display">0</span>/5</p>
                 </div>
                 
                 <!-- Timer Display -->
                 <div id="mining-timer" class="mining-timer">
-                    Mining session not active
+                    ⏰ Mining session not active
                 </div>
                 
                 <div class="miner-animation">
@@ -43,112 +216,165 @@
                     <div class="progress-bar">
                         <div class="progress" id="progress"></div>
                     </div>
+                    <p class="progress-text" id="progress-text">Click Start Mining to begin</p>
                 </div>
+                
                 <button class="btn-main" onclick="startMining()" id="mine-btn">
-                    ⛏️ Start 2-Hour Mining
+                    ⛏️ Start 2-Hour Mining Session
                 </button>
+                
+                <div class="session-info">
+                    <p>📌 Each session lasts 2 hours</p>
+                    <p>📌 Mines automatically every <span id="current-speed">9</span> seconds</p>
+                    <p>📌 Upgrade to mine faster and earn more</p>
+                </div>
             </div>
             
             <!-- Upgrade Tab -->
             <div id="upgrade-tab" class="tab-pane">
-                <h3>⚡ Upgrade Your Miner</h3>
-                <p class="upgrade-note">Upgrades require USDT payment to Ethereum address</p>
+                <div class="upgrade-note">
+                    ⚡ Upgrades require USDT payment. Payment activates immediately after verification.
+                </div>
                 
                 <div class="upgrades">
                     <div class="upgrade-item">
-                        <h4>⚡ Speed Boost</h4>
-                        <p>Reduce mining time by 3 seconds</p>
-                        <p>Current Level: <span id="speed-level">0</span>/10</p>
-                        <p class="cost-label">Cost: <span class="cost">10 USDT</span></p>
+                        <h4>⚡ Speed Boost Upgrade</h4>
+                        <p>Reduces mining time by 3 seconds per level</p>
+                        <div class="upgrade-details">
+                            <p>Current Level: <strong><span id="speed-level">0</span>/10</strong></p>
+                            <p>Current Speed: <strong><span id="current-mining-speed">9</span> seconds</strong></p>
+                            <p>Next Level Speed: <strong><span id="next-speed">6</span> seconds</strong></p>
+                        </div>
+                        <div class="cost-label">
+                            💵 Price: <span class="cost">$29.99 USDT</span>
+                        </div>
                         <button class="btn-upgrade" onclick="buyUpgrade('speed')" id="speed-btn">
-                            Buy Speed Upgrade (10 USDT)
+                            ⚡ Buy Speed Boost - $29.99
                         </button>
                     </div>
                     
                     <div class="upgrade-item">
-                        <h4>💎 Efficiency Boost</h4>
-                        <p>Double mining amount per cycle</p>
-                        <p>Current Level: <span id="efficiency-level">0</span>/5</p>
-                        <p class="cost-label">Cost: <span class="cost">25 USDT</span></p>
+                        <h4>💎 Efficiency Boost Upgrade</h4>
+                        <p>Doubles mining amount per cycle</p>
+                        <div class="upgrade-details">
+                            <p>Current Level: <strong><span id="efficiency-level">0</span>/5</strong></p>
+                            <p>Current Multiplier: <strong><span id="current-multiplier">1</span>x</strong></p>
+                            <p>Next Level Multiplier: <strong><span id="next-multiplier">2</span>x</strong></p>
+                        </div>
+                        <div class="cost-label">
+                            💵 Price: <span class="cost">$79.99 USDT</span>
+                        </div>
                         <button class="btn-upgrade" onclick="buyUpgrade('efficiency')" id="efficiency-btn">
-                            Buy Efficiency Upgrade (25 USDT)
+                            💎 Buy Efficiency Boost - $79.99
                         </button>
                     </div>
                 </div>
                 
                 <div class="payment-info">
-                    <h4>💳 Payment Information</h4>
-                    <p>Send USDT (ERC-20) to:</p>
+                    <h4>💳 Payment Instructions</h4>
+                    <p>Send exact USDT amount (ERC-20) to:</p>
                     <div class="address-box">
                         <code id="eth-address">0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c</code>
-                        <button class="copy-btn" onclick="copyAddress()">Copy</button>
                     </div>
-                    <p class="warning">⚠️ Only send exact amount for upgrade</p>
-                    <p class="warning">⚠️ Include transaction hash after payment</p>
+                    <button class="copy-btn" onclick="copyAddress()">📋 Copy Address</button>
+                    
+                    <div class="warning-box">
+                        <p class="warning">⚠️ Send only USDT (ERC-20 network)</p>
+                        <p class="warning">⚠️ Send exact amount shown above</p>
+                        <p class="warning">⚠️ Keep transaction hash for verification</p>
+                        <p class="warning">⚠️ Upgrades activate after 3 confirmations</p>
+                    </div>
+                    
+                    <div class="upgrade-benefits">
+                        <h5>🎯 Upgrade Benefits:</h5>
+                        <p>• Speed Boost: Mine every 6s instead of 9s</p>
+                        <p>• Efficiency Boost: Earn 2x more BTC per cycle</p>
+                        <p>• Stack upgrades for maximum earnings</p>
+                    </div>
                 </div>
             </div>
             
             <!-- Withdraw Tab -->
             <div id="withdraw-tab" class="tab-pane">
-                <h3>💰 Withdraw BTC</h3>
+                <h3>💰 Withdraw Your BTC</h3>
+                
+                <div class="balance-summary">
+                    <p>💎 Available Balance: <span id="available-balance">0.000000001</span> BTC</p>
+                    <p>📈 Total Earned: <span id="total-earned">0.000000001</span> BTC</p>
+                </div>
+                
                 <div class="withdraw-form">
-                    <p>Available Balance: <span id="available-balance">0.000000001</span> BTC</p>
-                    
                     <div class="input-group">
                         <label>Amount to withdraw (BTC)</label>
                         <input type="number" id="withdraw-amount" 
-                               placeholder="0.00000001" 
+                               placeholder="0.00100000" 
                                step="0.00000001"
-                               min="0.00000001">
+                               min="0.0001"
+                               max="1">
+                        <small>Minimum: 0.0001 BTC</small>
                     </div>
                     
                     <div class="input-group">
                         <label>Your BTC Wallet Address</label>
                         <input type="text" id="wallet-address" 
                                placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
+                        <small>Only Bitcoin (BTC) addresses accepted</small>
                     </div>
                     
                     <div class="fee-note">
-                        <p>⚠️ Processing fee: 0.0001 BTC</p>
-                        <p>⚠️ Minimum withdrawal: 0.0001 BTC</p>
+                        <p>⚠️ Network Fee: 0.0001 BTC</p>
+                        <p>⚠️ You will receive: (Amount - 0.0001 BTC)</p>
+                        <p>⚠️ Processing time: 1-24 hours</p>
                     </div>
                     
-                    <button class="btn-withdraw" onclick="withdraw()">
-                        Withdraw BTC
+                    <button class="btn-withdraw" onclick="withdraw()" id="withdraw-btn">
+                        💰 Request Withdrawal
                     </button>
                 </div>
                 
                 <div class="withdraw-history">
                     <h4>📜 Withdrawal History</h4>
                     <div id="history-list">
-                        <!-- History will appear here -->
+                        <div class="no-history" id="no-history">
+                            No withdrawal history yet
+                        </div>
                     </div>
+                </div>
+                
+                <div class="withdraw-info">
+                    <h5>ℹ️ Withdrawal Information:</h5>
+                    <p>• Minimum withdrawal: 0.0001 BTC</p>
+                    <p>• Network fee: 0.0001 BTC (deducted from amount)</p>
+                    <p>• Processed within 24 hours</p>
+                    <p>• Email confirmation sent upon completion</p>
                 </div>
             </div>
         </div>
         
-        <!-- Footer Info -->
+        <!-- Footer -->
         <div class="footer">
-            <p>BTC DK Mining • Session: 2 hours • Start mining to earn!</p>
+            <p>BTC DK Mining © 2024 • 2-Hour Mining Sessions • Upgrade to Earn More</p>
+            <p class="contact">Need help? Contact support in Telegram</p>
         </div>
     </div>
     
     <script src="script.js"></script>
     <script>
-        // Copy ETH address function
+        // Copy ETH address to clipboard
         function copyAddress() {
-            const address = document.getElementById('eth-address').textContent;
+            const address = "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c";
             navigator.clipboard.writeText(address).then(() => {
                 if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.showAlert('✅ Address copied to clipboard!');
-                } else {
-                    alert('Address copied!');
+                    window.Telegram.WebApp.showAlert('✅ Ethereum address copied to clipboard!\n\nSend exact USDT amount to this address.');
                 }
+            }).catch(err => {
+                console.error('Failed to copy:', err);
             });
         }
         
-        // Tab switching
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     // Remove active class from all tabs
@@ -161,6 +387,11 @@
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
             });
+            
+            // Load saved state if available
+            if (typeof loadGameState === 'function') {
+                loadGameState();
+            }
         });
     </script>
 </body>
