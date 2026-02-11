@@ -1,15 +1,16 @@
 // BTC DK MINING - PROFESSIONAL EDITION
 // Enterprise Grade Mining Interface
+// Starting Amount: 0.00000000000001 BTC
 
 // ============================================
 // GAME STATE - PREMIUM CONFIGURATION
 // ============================================
 const gameState = {
-    // Balance & Mining
-    balance: 0.000000001,
-    totalMined: 0.000000001,
-    miningSpeed: 9,
-    baseMiningAmount: 0.000000001,
+    // Balance & Mining - ULTRA PRECISE (14 decimal places)
+    balance: 0.00000000000001,      // Starting: 0.00000000000001 BTC (1/100th satoshi)
+    totalMined: 0.00000000000001,
+    miningSpeed: 9,                // 9 seconds per cycle
+    baseMiningAmount: 0.00000000000001, // Each cycle adds this amount
     
     // Session Management
     isAutoMining: false,
@@ -89,18 +90,18 @@ function saveGameState() {
 // UI UPDATES - PROFESSIONAL DASHBOARD
 // ============================================
 function updateUI() {
-    // Balance Display
-    updateElement('balance', gameState.balance.toFixed(9));
-    updateElement('available-balance', gameState.balance.toFixed(9));
-    updateElement('total-mined', gameState.totalMined.toFixed(9));
+    // Balance Display - 14 decimal places
+    updateElement('balance', gameState.balance.toFixed(14));
+    updateElement('available-balance', gameState.balance.toFixed(14));
+    updateElement('total-mined', gameState.totalMined.toFixed(14));
     
     // Mining Statistics
     const currentSpeed = Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3));
     const miningAmount = gameState.baseMiningAmount * Math.pow(2, gameState.upgrades.efficiencyLevel);
     
     updateElement('mining-speed', currentSpeed);
-    updateElement('mining-amount', miningAmount.toFixed(9));
-    updateElement('next-reward', miningAmount.toFixed(9) + ' BTC');
+    updateElement('mining-amount', miningAmount.toFixed(14));
+    updateElement('next-reward', miningAmount.toFixed(14) + ' BTC');
     
     // Upgrade Levels
     updateElement('speed-level', gameState.upgrades.speedLevel);
@@ -154,8 +155,9 @@ function updateUSDValues() {
     const balanceUSD = gameState.balance * BTC_TO_USD;
     const availableUSD = gameState.balance * BTC_TO_USD;
     
-    updateElement('balance-usd', balanceUSD.toFixed(2));
-    updateElement('available-usd', availableUSD.toFixed(2));
+    // Format with 8 decimal places for USD (since BTC amount is very small)
+    updateElement('balance-usd', balanceUSD.toFixed(8));
+    updateElement('available-usd', availableUSD.toFixed(8));
 }
 
 // ============================================
@@ -199,9 +201,9 @@ function startMiningSession() {
             return;
         }
         
-        // Add mining reward
-        gameState.balance += miningAmount;
-        gameState.totalMined += miningAmount;
+        // Add mining reward - with 14 decimal precision
+        gameState.balance = parseFloat((gameState.balance + miningAmount).toFixed(14));
+        gameState.totalMined = parseFloat((gameState.totalMined + miningAmount).toFixed(14));
         
         updateUI();
         updateUSDValues();
@@ -605,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tg) {
                 tg.showAlert(
                     '⚡ BTC DK MINING - Professional Edition\n\n' +
+                    '• Starting balance: 0.00000000000001 BTC\n' +
                     '• 2-Hour mining sessions\n' +
                     '• USDT upgrades (ERC-20)\n' +
                     '• Minimum withdrawal: 0.001 BTC\n' +
