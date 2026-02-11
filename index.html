@@ -3,196 +3,667 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BTC DK Mining</title>
+    <title>BTC DK Mining - Electric Mining Game</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Additional styles for new elements */
+        /* ELECTRIC ENTERTAINING BACKGROUND - CYBERPUNK MINING THEME */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            background: #0a0f0f;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* ELECTRICITY BACKGROUND ANIMATION */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(247, 147, 26, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at 90% 20%, rgba(247, 147, 26, 0.05) 0%, transparent 30%),
+                repeating-linear-gradient(45deg, rgba(0, 255, 255, 0.02) 0px, rgba(0, 255, 255, 0.02) 2px, transparent 2px, transparent 8px),
+                repeating-linear-gradient(-45deg, rgba(247, 147, 26, 0.02) 0px, rgba(247, 147, 26, 0.02) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+            z-index: -2;
+            animation: electricPulse 4s ease-in-out infinite;
+        }
+        
+        /* ELECTRIC GRID OVERLAY */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(247, 147, 26, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        /* FLOATING NEON ORBS */
+        .electric-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.15), transparent 70%);
+            filter: blur(40px);
+            animation: floatOrb 15s infinite alternate;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .electric-orb:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            background: radial-gradient(circle, rgba(247, 147, 26, 0.15), transparent 70%);
+            animation-delay: -2s;
+        }
+        
+        .electric-orb:nth-child(2) {
+            bottom: 10%;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.12), transparent 70%);
+            animation-delay: -5s;
+        }
+        
+        .electric-orb:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1), transparent 70%);
+            animation-delay: -8s;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes electricPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(30px) translateX(30px); }
+        }
+        
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 30px) scale(1.2); }
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(0, 255, 255, 0.3),
+                            0 0 20px rgba(247, 147, 26, 0.2);
+                border-color: rgba(0, 255, 255, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.6),
+                            0 0 40px rgba(247, 147, 26, 0.4);
+                border-color: rgba(247, 147, 26, 0.6);
+            }
+        }
+        
+        @keyframes lightning {
+            0%, 100% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+            10% { clip-path: polygon(5% 0%, 100% 15%, 95% 100%, 0% 85%); }
+            20% { clip-path: polygon(0% 10%, 95% 0%, 100% 90%, 5% 100%); }
+            30% { clip-path: polygon(10% 0%, 90% 5%, 95% 95%, 0% 90%); }
+        }
+        
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 25px 20px;
+            background: rgba(10, 15, 15, 0.7);
+            border-radius: 20px;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00ffff, #f7931a, #00ffff) 1;
+            animation: neonPulse 3s infinite;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header::before {
+            content: "⚡⚡⚡";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            animation: lightning 4s infinite;
+            pointer-events: none;
+        }
+        
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #f7931a, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .balance {
+            font-size: 26px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #f7931a;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .balance span {
+            color: #00ffff;
+            font-size: 30px;
+            font-weight: 900;
+            text-shadow: 0 0 20px #00ffff;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: rgba(10, 15, 15, 0.8);
+            border-radius: 15px;
+            padding: 5px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 5px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #00ffff, #f7931a);
+            color: black;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .tab:not(.active):hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .mining-stats {
+            background: rgba(10, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid;
+            border-image: linear-gradient(45deg, #00ffff, #f7931a) 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mining-stats p {
+            margin: 10px 0;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        .mining-stats p span {
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
         .mining-timer {
-            background: rgba(247, 147, 26, 0.1);
-            border: 2px solid rgba(247, 147, 26, 0.3);
-            border-radius: 10px;
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
             text-align: center;
             margin: 20px 0;
+            font-size: 22px;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            animation: neonPulse 2s infinite;
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mining-timer::before {
+            content: "⚡";
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            animation: rotateGear 4s linear infinite;
+        }
+        
+        .mining-timer::after {
+            content: "⚡";
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 40px;
+            animation: rotateGear 4s linear infinite reverse;
+        }
+        
+        .miner-animation {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .miner {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+            filter: drop-shadow(0 0 20px #00ffff);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #f7931a, #00ffff);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 15px;
+            color: #00ffff;
+            font-size: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .btn-main, .btn-upgrade, .btn-withdraw {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
             font-size: 18px;
             font-weight: bold;
-            color: #f7931a;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
         }
         
-        .upgrade-note {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            margin: 15px 0;
-            text-align: center;
-            font-size: 14px;
-            color: #ffd700;
+        .btn-main {
+            background: linear-gradient(45deg, #00ffff, #f7931a);
+            color: black;
+            border: 2px solid white;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
         
-        .cost-label {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            color: #f7931a;
+        .btn-main:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
+        }
+        
+        .btn-main:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            filter: grayscale(50%);
+        }
+        
+        .btn-upgrade {
+            background: rgba(10, 15, 15, 0.9);
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+        
+        .btn-upgrade:hover:not(:disabled) {
+            background: linear-gradient(45deg, #00ffff, #f7931a);
+            color: black;
+            border-color: white;
+            transform: translateY(-3px);
+        }
+        
+        .btn-withdraw {
+            background: linear-gradient(45deg, #00ffff, #2196F3);
+            color: black;
+            border: 2px solid white;
+            box-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
+        }
+        
+        .btn-withdraw:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(33, 150, 243, 0.8);
+        }
+        
+        .upgrade-item {
+            background: rgba(10, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .upgrade-item:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .upgrade-item h4 {
+            color: #00ffff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ffff;
+            font-family: 'Orbitron', sans-serif;
         }
         
         .cost {
-            color: #ffd700;
-            font-size: 18px;
+            color: #f7931a;
+            font-size: 22px;
             font-weight: bold;
+            text-shadow: 0 0 10px #f7931a;
         }
         
         .payment-info {
-            background: rgba(52, 152, 219, 0.1);
-            border: 1px solid rgba(52, 152, 219, 0.3);
-            border-radius: 10px;
-            padding: 15px;
+            background: rgba(10, 15, 15, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00ffff, #f7931a) 1;
+            border-radius: 15px;
+            padding: 20px;
             margin-top: 20px;
         }
         
         .address-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 10px 0;
+            background: black;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
             word-break: break-all;
             font-family: monospace;
-            font-size: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            color: #00ffff;
         }
         
         .copy-btn {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
+            background: linear-gradient(45deg, #00ffff, #2196F3);
+            color: black;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
             font-weight: bold;
             width: 100%;
+            font-size: 16px;
+            transition: all 0.3s;
+            border: 1px solid white;
+            font-family: 'Orbitron', sans-serif;
         }
         
-        .warning {
-            color: #e74c3c;
-            font-size: 12px;
-            margin: 5px 0;
+        .copy-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
         }
         
         .input-group {
-            margin: 15px 0;
+            margin: 20px 0;
         }
         
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #aaa;
-            font-size: 14px;
+            margin-bottom: 8px;
+            color: #00ffff;
+            font-size: 15px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
         }
         
         .input-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(247, 147, 26, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             font-size: 16px;
             box-sizing: border-box;
+            transition: all 0.3s;
         }
         
         .input-group input:focus {
             outline: none;
-            border-color: #f7931a;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
         }
         
         .fee-note {
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid rgba(231, 76, 60, 0.3);
-            border-radius: 8px;
-            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
             margin: 15px 0;
-            font-size: 13px;
+            color: #fff;
         }
         
         .history-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 15px;
             margin: 10px 0;
-            border-left: 4px solid #f7931a;
-        }
-        
-        .status {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 5px;
+            border-left: 4px solid #00ffff;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
         }
         
         .status.pending {
-            background: rgba(241, 196, 15, 0.2);
-            color: #f1c40f;
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
         
         .footer {
             text-align: center;
             margin-top: 30px;
-            padding: 15px;
-            color: #777;
-            font-size: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px #00ffff;
         }
         
-        /* Button states */
-        .btn-main:disabled,
-        .btn-upgrade:disabled,
-        .btn-withdraw:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .warning {
+            color: #00ffff;
+            font-size: 13px;
+            margin: 8px 0;
+            text-shadow: 0 0 3px #00ffff;
         }
         
-        /* Responsive adjustments */
+        .session-info {
+            background: rgba(10, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #fff;
+        }
+        
+        .session-info p {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .session-info p:before {
+            content: "⚡";
+            margin-right: 10px;
+            color: #00ffff;
+        }
+        
+        /* Mining animation effects */
+        .mining-particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFly 1s ease-out forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes particleFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+        
+        /* Responsive */
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 22px;
-            }
-            
-            .balance {
-                font-size: 20px;
-            }
-            
-            .tab {
-                font-size: 12px;
-                padding: 10px 5px;
-            }
-            
-            .mining-timer {
-                font-size: 16px;
-                padding: 12px;
-            }
+            .header h1 { font-size: 22px; }
+            .balance { font-size: 20px; }
+            .balance span { font-size: 24px; }
+            .miner { font-size: 60px; }
+            .mining-timer { font-size: 18px; }
+            .tab { font-size: 13px; padding: 12px 3px; }
         }
     </style>
 </head>
 <body>
+    <!-- Electric Orbs for Background -->
+    <div class="electric-orb"></div>
+    <div class="electric-orb"></div>
+    <div class="electric-orb"></div>
+    
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>⛏️ BTC DK Mining</h1>
+            <h1>⚡ BTC DK MINING ⚡</h1>
             <div class="balance">
-                Balance: <span id="balance">0.000000001</span> BTC
+                BALANCE: <span id="balance">0.000000001</span> BTC
             </div>
         </div>
         
         <!-- Tabs Navigation -->
         <div class="tabs">
-            <button class="tab active" data-tab="mining">⛏️ Mining</button>
-            <button class="tab" data-tab="upgrade">⚡ Upgrade</button>
-            <button class="tab" data-tab="withdraw">💰 Withdraw</button>
+            <button class="tab active" data-tab="mining">⛏️ MINING</button>
+            <button class="tab" data-tab="upgrade">⚡ UPGRADE</button>
+            <button class="tab" data-tab="withdraw">💰 WITHDRAW</button>
         </div>
         
         <!-- Tab Content -->
@@ -200,15 +671,15 @@
             <!-- Mining Tab -->
             <div id="mining-tab" class="tab-pane active">
                 <div class="mining-stats">
-                    <p>⏱️ Speed: <span id="mining-speed">9s</span> per cycle</p>
-                    <p>📊 Total Mined: <span id="total-mined">0.000000001</span> BTC</p>
-                    <p>⚡ Speed Level: <span id="speed-level-display">0</span>/10</p>
-                    <p>💎 Efficiency Level: <span id="efficiency-level-display">0</span>/5</p>
+                    <p>⚡ MINING SPEED <span id="mining-speed">9s</span></p>
+                    <p>📊 TOTAL MINED <span id="total-mined">0.000000001</span> BTC</p>
+                    <p>⚙️ SPEED LEVEL <span id="speed-level-display">0</span>/10</p>
+                    <p>💎 EFFICIENCY <span id="efficiency-level-display">0</span>/5</p>
                 </div>
                 
                 <!-- Timer Display -->
                 <div id="mining-timer" class="mining-timer">
-                    ⏰ Mining session not active
+                    ⚡ MINING SESSION NOT ACTIVE ⚡
                 </div>
                 
                 <div class="miner-animation">
@@ -216,145 +687,145 @@
                     <div class="progress-bar">
                         <div class="progress" id="progress"></div>
                     </div>
-                    <p class="progress-text" id="progress-text">Click Start Mining to begin</p>
+                    <p class="progress-text" id="progress-text">⚡ START MINING TO EARN BTC ⚡</p>
                 </div>
                 
                 <button class="btn-main" onclick="startMining()" id="mine-btn">
-                    ⛏️ Start 2-Hour Mining Session
+                    ⚡ START 2-HOUR MINING SESSION ⚡
                 </button>
                 
                 <div class="session-info">
-                    <p>📌 Each session lasts 2 hours</p>
-                    <p>📌 Mines automatically every <span id="current-speed">9</span> seconds</p>
-                    <p>📌 Upgrade to mine faster and earn more</p>
+                    <p>2 HOUR MINING SESSION</p>
+                    <p>AUTOMATIC MINING EVERY <span id="current-speed">9</span> SECONDS</p>
+                    <p>UPGRADE TO MINE FASTER AND EARN MORE</p>
                 </div>
             </div>
             
             <!-- Upgrade Tab -->
             <div id="upgrade-tab" class="tab-pane">
-                <div class="upgrade-note">
-                    ⚡ Upgrades require USDT payment. Payment activates immediately after verification.
+                <div class="upgrade-note" style="background: rgba(0,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #00ffff; color: #00ffff; text-align: center;">
+                    ⚡ UPGRADES REQUIRE USDT PAYMENT - INSTANT ACTIVATION ⚡
                 </div>
                 
                 <div class="upgrades">
                     <div class="upgrade-item">
-                        <h4>⚡ Speed Boost Upgrade</h4>
-                        <p>Reduces mining time by 3 seconds per level</p>
+                        <h4>⚡ SPEED BOOST UPGRADE</h4>
+                        <p>REDUCE MINING TIME BY 3 SECONDS</p>
                         <div class="upgrade-details">
-                            <p>Current Level: <strong><span id="speed-level">0</span>/10</strong></p>
-                            <p>Current Speed: <strong><span id="current-mining-speed">9</span> seconds</strong></p>
-                            <p>Next Level Speed: <strong><span id="next-speed">6</span> seconds</strong></p>
+                            <p>CURRENT LEVEL: <strong><span id="speed-level">0</span>/10</strong></p>
+                            <p>CURRENT SPEED: <strong><span id="current-mining-speed">9</span>S</strong></p>
+                            <p>NEXT LEVEL: <strong><span id="next-speed">6</span>S</strong></p>
                         </div>
-                        <div class="cost-label">
-                            💵 Price: <span class="cost">$29.99 USDT</span>
+                        <div class="cost-label" style="color: #00ffff; font-size: 24px; margin: 15px 0;">
+                            💵 PRICE: <span class="cost">$29.99 USDT</span>
                         </div>
                         <button class="btn-upgrade" onclick="buyUpgrade('speed')" id="speed-btn">
-                            ⚡ Buy Speed Boost - $29.99
+                            ⚡ BUY SPEED BOOST - $29.99 ⚡
                         </button>
                     </div>
                     
                     <div class="upgrade-item">
-                        <h4>💎 Efficiency Boost Upgrade</h4>
-                        <p>Doubles mining amount per cycle</p>
+                        <h4>💎 EFFICIENCY BOOST UPGRADE</h4>
+                        <p>DOUBLES MINING AMOUNT PER CYCLE</p>
                         <div class="upgrade-details">
-                            <p>Current Level: <strong><span id="efficiency-level">0</span>/5</strong></p>
-                            <p>Current Multiplier: <strong><span id="current-multiplier">1</span>x</strong></p>
-                            <p>Next Level Multiplier: <strong><span id="next-multiplier">2</span>x</strong></p>
+                            <p>CURRENT LEVEL: <strong><span id="efficiency-level">0</span>/5</strong></p>
+                            <p>CURRENT MULTIPLIER: <strong><span id="current-multiplier">1</span>X</strong></p>
+                            <p>NEXT LEVEL: <strong><span id="next-multiplier">2</span>X</strong></p>
                         </div>
-                        <div class="cost-label">
-                            💵 Price: <span class="cost">$79.99 USDT</span>
+                        <div class="cost-label" style="color: #f7931a; font-size: 24px; margin: 15px 0;">
+                            💵 PRICE: <span class="cost">$79.99 USDT</span>
                         </div>
                         <button class="btn-upgrade" onclick="buyUpgrade('efficiency')" id="efficiency-btn">
-                            💎 Buy Efficiency Boost - $79.99
+                            💎 BUY EFFICIENCY BOOST - $79.99 💎
                         </button>
                     </div>
                 </div>
                 
                 <div class="payment-info">
-                    <h4>💳 Payment Instructions</h4>
-                    <p>Send exact USDT amount (ERC-20) to:</p>
+                    <h4 style="color: #00ffff; font-family: 'Orbitron'; text-align: center; margin-bottom: 15px;">⚡ PAYMENT INSTRUCTIONS ⚡</h4>
+                    <p style="color: #fff; text-align: center;">SEND EXACT USDT AMOUNT (ERC-20) TO:</p>
                     <div class="address-box">
-                        <code id="eth-address">0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c</code>
+                        <code id="eth-address" style="color: #00ffff;">0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c</code>
                     </div>
-                    <button class="copy-btn" onclick="copyAddress()">📋 Copy Address</button>
+                    <button class="copy-btn" onclick="copyAddress()">📋 COPY ADDRESS</button>
                     
-                    <div class="warning-box">
-                        <p class="warning">⚠️ Send only USDT (ERC-20 network)</p>
-                        <p class="warning">⚠️ Send exact amount shown above</p>
-                        <p class="warning">⚠️ Keep transaction hash for verification</p>
-                        <p class="warning">⚠️ Upgrades activate after 3 confirmations</p>
+                    <div style="margin-top: 20px;">
+                        <p class="warning">⚠️ SEND ONLY USDT (ERC-20 NETWORK)</p>
+                        <p class="warning">⚠️ SEND EXACT AMOUNT SHOWN ABOVE</p>
+                        <p class="warning">⚠️ KEEP TRANSACTION HASH FOR VERIFICATION</p>
+                        <p class="warning">⚠️ UPGRADES ACTIVATE AFTER 3 CONFIRMATIONS</p>
                     </div>
                     
-                    <div class="upgrade-benefits">
-                        <h5>🎯 Upgrade Benefits:</h5>
-                        <p>• Speed Boost: Mine every 6s instead of 9s</p>
-                        <p>• Efficiency Boost: Earn 2x more BTC per cycle</p>
-                        <p>• Stack upgrades for maximum earnings</p>
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(0,255,255,0.05); border-radius: 10px;">
+                        <h5 style="color: #00ffff; margin-bottom: 10px;">🎯 UPGRADE BENEFITS:</h5>
+                        <p style="color: #fff;">• SPEED BOOST: MINE EVERY 6S INSTEAD OF 9S</p>
+                        <p style="color: #fff;">• EFFICIENCY BOOST: EARN 2X MORE BTC PER CYCLE</p>
+                        <p style="color: #fff;">• STACK UPGRADES FOR MAXIMUM EARNINGS</p>
                     </div>
                 </div>
             </div>
             
             <!-- Withdraw Tab -->
             <div id="withdraw-tab" class="tab-pane">
-                <h3>💰 Withdraw Your BTC</h3>
+                <h3 style="color: #00ffff; font-family: 'Orbitron'; text-align: center; margin-bottom: 20px;">💰 WITHDRAW YOUR BTC 💰</h3>
                 
-                <div class="balance-summary">
-                    <p>💎 Available Balance: <span id="available-balance">0.000000001</span> BTC</p>
-                    <p>📈 Total Earned: <span id="total-earned">0.000000001</span> BTC</p>
+                <div class="balance-summary" style="background: rgba(0,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #00ffff;">
+                    <p style="font-size: 18px;">💎 AVAILABLE BALANCE: <span style="color: #00ffff; font-size: 22px;" id="available-balance">0.000000001</span> BTC</p>
+                    <p style="font-size: 16px;">📈 TOTAL EARNED: <span style="color: #00ffff;" id="total-earned">0.000000001</span> BTC</p>
                 </div>
                 
                 <div class="withdraw-form">
                     <div class="input-group">
-                        <label>Amount to withdraw (BTC)</label>
+                        <label>💰 AMOUNT TO WITHDRAW (BTC)</label>
                         <input type="number" id="withdraw-amount" 
                                placeholder="0.00100000" 
                                step="0.00000001"
-                               min="0.0001"
-                               max="1">
-                        <small>Minimum: 0.0001 BTC</small>
+                               min="0.001"
+                               max="10">
+                        <small style="color: #00ffff;">MINIMUM WITHDRAWAL: 0.001 BTC</small>
                     </div>
                     
                     <div class="input-group">
-                        <label>Your BTC Wallet Address</label>
+                        <label>🔑 YOUR BTC WALLET ADDRESS</label>
                         <input type="text" id="wallet-address" 
                                placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
-                        <small>Only Bitcoin (BTC) addresses accepted</small>
+                        <small style="color: #00ffff;">ONLY BITCOIN (BTC) ADDRESSES ACCEPTED</small>
                     </div>
                     
-                    <div class="fee-note">
-                        <p>⚠️ Network Fee: 0.0001 BTC</p>
-                        <p>⚠️ You will receive: (Amount - 0.0001 BTC)</p>
-                        <p>⚠️ Processing time: 1-24 hours</p>
+                    <div class="fee-note" style="background: rgba(247,147,26,0.1); border-color: #f7931a;">
+                        <p style="color: #f7931a;">⚠️ NETWORK FEE: 0.0001 BTC</p>
+                        <p style="color: #f7931a;">⚠️ YOU RECEIVE: (AMOUNT - 0.0001 BTC)</p>
+                        <p style="color: #f7931a;">⚠️ PROCESSING TIME: 1-24 HOURS</p>
                     </div>
                     
                     <button class="btn-withdraw" onclick="withdraw()" id="withdraw-btn">
-                        💰 Request Withdrawal
+                        💰 REQUEST WITHDRAWAL 💰
                     </button>
                 </div>
                 
-                <div class="withdraw-history">
-                    <h4>📜 Withdrawal History</h4>
+                <div class="withdraw-history" style="margin-top: 30px;">
+                    <h4 style="color: #00ffff; margin-bottom: 15px;">📜 WITHDRAWAL HISTORY</h4>
                     <div id="history-list">
-                        <div class="no-history" id="no-history">
-                            No withdrawal history yet
+                        <div class="no-history" id="no-history" style="color: #00ffff; text-align: center; padding: 20px; border: 1px dashed #00ffff; border-radius: 10px;">
+                            NO WITHDRAWAL HISTORY YET
                         </div>
                     </div>
                 </div>
                 
-                <div class="withdraw-info">
-                    <h5>ℹ️ Withdrawal Information:</h5>
-                    <p>• Minimum withdrawal: 0.0001 BTC</p>
-                    <p>• Network fee: 0.0001 BTC (deducted from amount)</p>
-                    <p>• Processed within 24 hours</p>
-                    <p>• Email confirmation sent upon completion</p>
+                <div class="withdraw-info" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid #00ffff;">
+                    <h5 style="color: #00ffff;">ℹ️ WITHDRAWAL INFORMATION:</h5>
+                    <p style="color: #fff;">• MINIMUM WITHDRAWAL: <strong style="color: #00ffff;">0.001 BTC</strong></p>
+                    <p style="color: #fff;">• NETWORK FEE: 0.0001 BTC (DEDUCTED FROM AMOUNT)</p>
+                    <p style="color: #fff;">• PROCESSED WITHIN 24 HOURS</p>
+                    <p style="color: #fff;">• EMAIL CONFIRMATION SENT UPON COMPLETION</p>
                 </div>
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p>BTC DK Mining © 2024 • 2-Hour Mining Sessions • Upgrade to Earn More</p>
-            <p class="contact">Need help? Contact support in Telegram</p>
+            <p>⚡ BTC DK MINING © 2024 • 2-HOUR MINING SESSIONS • MIN WITHDRAWAL: 0.001 BTC ⚡</p>
+            <p style="color: #f7931a; margin-top: 10px;">⚡ UPGRADE WITH USDT TO MINE FASTER AND EARN MORE ⚡</p>
         </div>
     </div>
     
@@ -365,32 +836,70 @@
             const address = "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c";
             navigator.clipboard.writeText(address).then(() => {
                 if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.showAlert('✅ Ethereum address copied to clipboard!\n\nSend exact USDT amount to this address.');
+                    window.Telegram.WebApp.showAlert('✅ ETHEREUM ADDRESS COPIED!\n\nSEND EXACT USDT AMOUNT TO THIS ADDRESS.');
                 }
-            }).catch(err => {
-                console.error('Failed to copy:', err);
             });
         }
         
-        // Initialize when page loads
+        // Particle effect for mining
+        function createMiningParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mining-particle';
+                const angle = (Math.PI * 2 * i) / 20;
+                const tx = Math.cos(angle) * 100;
+                const ty = Math.sin(angle) * 100;
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.background = i % 2 === 0 ? '#00ffff' : '#f7931a';
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+        
+        // Override startMining to add particle effects
+        const originalStartMining = startMining;
+        startMining = function() {
+            if (originalStartMining) {
+                originalStartMining();
+                createMiningParticles();
+            }
+        };
+        
+        // Tab switching
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // Remove active class from all tabs
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
                     
-                    // Add active class to clicked tab
                     tab.classList.add('active');
                     const tabId = tab.getAttribute('data-tab');
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
             });
             
-            // Load saved state if available
             if (typeof loadGameState === 'function') {
                 loadGameState();
+            }
+            
+            // Show welcome message
+            if (!localStorage.getItem('btcMinerWelcome')) {
+                setTimeout(() => {
+                    if (window.Telegram && window.Telegram.WebApp) {
+                        window.Telegram.WebApp.showAlert('⚡⚡⚡ WELCOME TO BTC DK MINING! ⚡⚡⚡\n\n' +
+                                                       '⛏️ START 2-HOUR MINING SESSIONS\n' +
+                                                       '⚡ UPGRADE WITH USDT TO MINE FASTER\n' +
+                                                       '💰 WITHDRAW YOUR BTC (MIN: 0.001 BTC)\n\n' +
+                                                       '🎮 READY TO MINE? LET\'S GO! ⚡');
+                    }
+                    localStorage.setItem('btcMinerWelcome', 'true');
+                }, 1000);
             }
         });
     </script>
