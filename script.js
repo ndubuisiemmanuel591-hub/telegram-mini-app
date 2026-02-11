@@ -1,16 +1,16 @@
 // BTC DK MINING - PROFESSIONAL EDITION
 // Enterprise Grade Mining Interface
-// Starting Amount: 0.00000000000001 BTC
+// Starting Amount: 0.00000000000001 BTC (1e-14)
 
 // ============================================
 // GAME STATE - PREMIUM CONFIGURATION
 // ============================================
 const gameState = {
-    // Balance & Mining - ULTRA PRECISE (14 decimal places)
-    balance: 0.00000000000001,      // Starting: 0.00000000000001 BTC (1/100th satoshi)
-    totalMined: 0.00000000000001,
-    miningSpeed: 9,                // 9 seconds per cycle
-    baseMiningAmount: 0.00000000000001, // Each cycle adds this amount
+    // Balance & Mining - Using exponential notation for readability
+    balance: 1e-14,              // 0.00000000000001 BTC
+    totalMined: 1e-14,           // 0.00000000000001 BTC
+    miningSpeed: 9,              // 9 seconds per cycle
+    baseMiningAmount: 1e-14,     // Each cycle adds this amount
     
     // Session Management
     isAutoMining: false,
@@ -52,6 +52,50 @@ if (tg) {
 }
 
 // ============================================
+// NUMBER FORMATTING - CLEAN AND READABLE
+// ============================================
+function formatBTC(value) {
+    if (value === 0) return '0';
+    
+    // For very small numbers (less than 0.00000001), use scientific notation
+    if (value < 1e-8) {
+        return value.toExponential(2); // 1.00e-14
+    }
+    
+    // For small numbers, show up to 8 decimal places
+    if (value < 1) {
+        return value.toFixed(8);
+    }
+    
+    // For larger numbers, use comma formatting
+    return value.toLocaleString('en-US', {
+        minimumFractionDigits: 8,
+        maximumFractionDigits: 8
+    });
+}
+
+function formatCompactBTC(value) {
+    if (value === 0) return '0';
+    
+    // Very small numbers - show as satoshis or scientific
+    if (value < 1e-8) {
+        // Convert to satoshis (1 BTC = 100,000,000 satoshis)
+        const satoshis = value * 1e8;
+        if (satoshis < 0.01) {
+            return value.toExponential(2); // 1.23e-14
+        }
+        return satoshis.toFixed(2) + ' sats';
+    }
+    
+    // Normal BTC display
+    if (value < 1) {
+        return value.toFixed(8) + ' BTC';
+    }
+    
+    return value.toFixed(4) + ' BTC';
+}
+
+// ============================================
 // LOAD / SAVE STATE
 // ============================================
 function loadGameState() {
@@ -90,18 +134,18 @@ function saveGameState() {
 // UI UPDATES - PROFESSIONAL DASHBOARD
 // ============================================
 function updateUI() {
-    // Balance Display - 14 decimal places
-    updateElement('balance', gameState.balance.toFixed(14));
-    updateElement('available-balance', gameState.balance.toFixed(14));
-    updateElement('total-mined', gameState.totalMined.toFixed(14));
+    // Balance Display - Use compact formatting for main balance
+    updateElement('balance', formatCompactBTC(gameState.balance));
+    updateElement('available-balance', formatBTC(gameState.balance));
+    updateElement('total-mined', formatCompactBTC(gameState.totalMined));
     
     // Mining Statistics
     const currentSpeed = Math.max(3, gameState.miningSpeed - (gameState.upgrades.speedLevel * 3));
     const miningAmount = gameState.baseMiningAmount * Math.pow(2, gameState.upgrades.efficiencyLevel);
     
     updateElement('mining-speed', currentSpeed);
-    updateElement('mining-amount', miningAmount.toFixed(14));
-    updateElement('next-reward', miningAmount.toFixed(14) + ' BTC');
+    updateElement('mining-amount', formatBTC(miningAmount));
+    updateElement('next-reward', formatCompactBTC(miningAmount));
     
     // Upgrade Levels
     updateElement('speed-level', gameState.upgrades.speedLevel);
@@ -155,9 +199,18 @@ function updateUSDValues() {
     const balanceUSD = gameState.balance * BTC_TO_USD;
     const availableUSD = gameState.balance * BTC_TO_USD;
     
-    // Format with 8 decimal places for USD (since BTC amount is very small)
-    updateElement('balance-usd', balanceUSD.toFixed(8));
-    updateElement('available-usd', availableUSD.toFixed(8));
+    // Format USD with appropriate decimal places
+    if (balanceUSD < 0.0001) {
+        updateElement('balance-usd', balanceUSD.toExponential(2));
+    } else {
+        updateElement('balance-usd', balanceUSD.toFixed(4));
+    }
+    
+    if (availableUSD < 0.0001) {
+        updateElement('available-usd', availableUSD.toExponential(2));
+    } else {
+        updateElement('available-usd', availableUSD.toFixed(4));
+    }
 }
 
 // ============================================
@@ -447,7 +500,7 @@ function withdraw() {
     }
     
     if (amount > gameState.balance) {
-        if (tg) tg.showAlert(`Insufficient balance\nAvailable: ${gameState.balance.toFixed(8)} BTC`);
+        if (tg) tg.showAlert(`Insufficient balance\nAvailable: ${formatCompactBTC(gameState.balance)}`);
         return;
     }
     
@@ -607,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tg) {
                 tg.showAlert(
                     '⚡ BTC DK MINING - Professional Edition\n\n' +
-                    '• Starting balance: 0.00000000000001 BTC\n' +
+                    '• Starting balance: 1e-14 BTC (0.00000000000001)\n' +
                     '• 2-Hour mining sessions\n' +
                     '• USDT upgrades (ERC-20)\n' +
                     '• Minimum withdrawal: 0.001 BTC\n' +
