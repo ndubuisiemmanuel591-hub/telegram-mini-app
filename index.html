@@ -9,139 +9,592 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* [KEEP ALL EXISTING STYLES FROM PREVIOUS PROFESSIONAL VERSION] */
-        
-        /* ADDITIONAL STYLES FOR REFERRAL TAB */
-        .referral-card {
-            background: linear-gradient(135deg, rgba(0,195,255,0.1), rgba(247,147,26,0.05));
-            border: 1px solid rgba(0,195,255,0.2);
+        /* PROFESSIONAL ELECTRIC - ADULT ORIENTED */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Space Grotesk', -apple-system, sans-serif;
+            background: #03050a;
+            color: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            letter-spacing: -0.02em;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        /* PREMIUM ELECTRIC LIVE BACKGROUND - CINEMATIC */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 195, 255, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(247, 147, 26, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(0, 195, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(247, 147, 26, 0.02) 0%, transparent 50%),
+                repeating-linear-gradient(90deg, rgba(0, 195, 255, 0.01) 0px, rgba(0, 195, 255, 0.01) 1px, transparent 1px, transparent 30px),
+                repeating-linear-gradient(0deg, rgba(247, 147, 26, 0.01) 0px, rgba(247, 147, 26, 0.01) 1px, transparent 1px, transparent 30px);
+            pointer-events: none;
+            z-index: -2;
+            animation: cinematicBreathing 8s ease-in-out infinite;
+        }
+
+        /* HIGH-VOLTAGE ENERGY LINES */
+        body::after {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(0, 195, 255, 0.02) 60deg, transparent 120deg, transparent 240deg, rgba(247, 147, 26, 0.02) 300deg, transparent 360deg);
+            animation: electricField 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes cinematicBreathing {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes electricField {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 rgba(0, 195, 255, 0), 0 0 0 rgba(247, 147, 26, 0);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(0, 195, 255, 0.1), 0 0 40px rgba(247, 147, 26, 0.05);
+                border-color: rgba(0, 195, 255, 0.3);
+            }
+        }
+
+        /* PREMIUM GLASS MORPHISM */
+        .glass-panel {
+            background: rgba(8, 12, 18, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 20px;
+            box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* HEADER - EXECUTIVE STYLE */
+        .header {
+            padding: 30px 25px;
+            margin-bottom: 25px;
+            background: rgba(5, 8, 12, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 195, 255, 0.15);
+            border-radius: 32px;
             position: relative;
             overflow: hidden;
+            animation: energyPulse 4s infinite;
         }
-        
-        .referral-card::before {
-            content: "👥";
+
+        .header::before {
+            content: "";
             position: absolute;
-            right: 20px;
-            bottom: 20px;
-            font-size: 60px;
-            opacity: 0.1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 195, 255, 0.5), rgba(247, 147, 26, 0.5), transparent);
+            animation: scanLine 6s linear infinite;
         }
-        
-        .referral-code-box {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(0,195,255,0.3);
-            border-radius: 16px;
-            padding: 16px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+
+        @keyframes scanLine {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
-        
-        .referral-code {
-            font-family: 'Space Grotesk', monospace;
-            font-size: 20px;
-            font-weight: 700;
-            color: #00c3ff;
-            letter-spacing: 2px;
-        }
-        
-        .referral-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 20px 0;
-        }
-        
-        .referral-stat {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-        }
-        
-        .referral-stat-value {
+
+        .header h1 {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 24px;
-            font-weight: 700;
-            color: #00c3ff;
-            margin-bottom: 5px;
-        }
-        
-        .referral-stat-label {
-            font-size: 12px;
-            color: #8a9aa8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .commission-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f7931a, #e67e22);
-            color: white;
-            font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 14px;
-            margin: 10px 0;
-        }
-        
-        .referral-link-box {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            word-break: break-all;
-            margin-top: 10px;
-        }
-        
-        .referral-link-text {
-            font-size: 12px;
-            color: #8a9aa8;
-            font-family: monospace;
-        }
-        
-        .tier-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .tier-item:last-child {
-            border-bottom: none;
-        }
-        
-        .tier-level {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #a0b0c0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .tier-badge {
-            width: 30px;
-            height: 30px;
-            border-radius: 30px;
-            background: rgba(0,195,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #00c3ff;
+
+        .header h1::before {
+            content: "⚡";
+            font-size: 28px;
+            background: none;
+            -webkit-text-fill-color: #00c3ff;
+            filter: drop-shadow(0 0 8px rgba(0, 195, 255, 0.5));
         }
-        
-        .tier-percentage {
+
+        .balance {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #00c3ff, #00e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            position: relative;
+        }
+
+        .balance small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #8a9aa8;
+            -webkit-text-fill-color: #8a9aa8;
+            margin-left: 8px;
+        }
+
+        .balance-usd {
+            font-size: 16px;
+            color: #8a9aa8;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        /* NAVIGATION - MINIMAL LUXURY */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: rgba(5, 8, 12, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 6px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 8px;
+            border: none;
+            background: transparent;
+            color: #8a9aa8;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, rgba(0, 195, 255, 0.15), rgba(247, 147, 26, 0.1));
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.1);
+            border: 1px solid rgba(0, 195, 255, 0.2);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* STATS CARDS - PROFESSIONAL */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(8, 12, 18, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8a9aa8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            color: white;
+        }
+
+        .stat-unit {
+            font-size: 14px;
+            font-weight: 400;
+            color: #00c3ff;
+            margin-left: 5px;
+        }
+
+        /* MINING TIMER - PREMIUM */
+        .mining-timer {
+            background: linear-gradient(135deg, rgba(0, 195, 255, 0.1), rgba(247, 147, 26, 0.05));
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            border-radius: 24px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-display {
+            font-size: 42px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', monospace;
+            color: white;
+            letter-spacing: 5px;
+            text-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+        }
+
+        .timer-label {
+            font-size: 14px;
+            color: #8a9aa8;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+
+        /* MINING PROGRESS - ELEGANT */
+        .mining-section {
+            background: rgba(8, 12, 18, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .progress-container {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00c3ff, #00e0ff, #00c3ff);
+            background-size: 200% 100%;
+            width: 0%;
+            border-radius: 100px;
+            transition: width 0.3s ease;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+
+        /* BUTTONS - SOPHISTICATED */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00c3ff, #0099cc);
+            color: white;
+            box-shadow: 0 8px 20px -8px rgba(0, 195, 255, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px -8px rgba(0, 195, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(0, 195, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-icon {
+            padding: 10px 16px;
+            background: rgba(0, 195, 255, 0.1);
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            border-radius: 12px;
+            color: #00c3ff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: rgba(0, 195, 255, 0.2);
+        }
+
+        /* UPGRADE CARDS - PREMIUM */
+        .upgrade-card {
+            background: rgba(8, 12, 18, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .upgrade-card:hover {
+            border-color: rgba(0, 195, 255, 0.2);
+            box-shadow: 0 10px 30px -15px rgba(0, 195, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .upgrade-title {
             font-size: 18px;
             font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upgrade-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #00c3ff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .upgrade-desc {
+            font-size: 14px;
+            color: #8a9aa8;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .upgrade-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 16px;
+        }
+
+        .upgrade-stat {
+            text-align: center;
+        }
+
+        .upgrade-stat-label {
+            font-size: 12px;
+            color: #8a9aa8;
+            margin-bottom: 5px;
+        }
+
+        .upgrade-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* ADDRESS CARD - CLEAN */
+        .address-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 195, 255, 0.15);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-all;
+        }
+
+        .address-text {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 13px;
+            color: #00c3ff;
+            letter-spacing: 0.5px;
+        }
+
+        /* WITHDRAW SECTION */
+        .withdraw-section {
+            background: rgba(8, 12, 18, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #8a9aa8;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(0, 195, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(0, 195, 255, 0.05);
+        }
+
+        .fee-info {
+            background: rgba(247, 147, 26, 0.05);
+            border: 1px solid rgba(247, 147, 26, 0.15);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
             color: #f7931a;
+            font-size: 14px;
+        }
+
+        /* HISTORY ITEMS */
+        .history-list {
+            margin-top: 20px;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-pending {
+            background: rgba(247, 147, 26, 0.1);
+            color: #f7931a;
+            border: 1px solid rgba(247, 147, 26, 0.2);
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #5a6a78;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+
+        .highlight {
+            color: #00c3ff;
+        }
+
+        .mt-4 {
+            margin-top: 20px;
+        }
+
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .container { padding: 16px; }
+            .header h1 { font-size: 22px; }
+            .balance { font-size: 28px; }
+            .timer-display { font-size: 36px; }
+            .stat-value { font-size: 20px; }
+            .tab { font-size: 13px; padding: 12px 4px; }
         }
     </style>
 </head>
@@ -166,7 +619,7 @@
             </div>
         </div>
 
-        <!-- NAVIGATION - NOW WITH 4 TABS -->
+        <!-- NAVIGATION - 4 TABS -->
         <div class="tabs">
             <button class="tab active" data-tab="mining">⛏️ Mining</button>
             <button class="tab" data-tab="upgrade">⚡ Upgrade</button>
@@ -174,132 +627,328 @@
             <button class="tab" data-tab="withdraw">💰 Withdraw</button>
         </div>
 
-        <!-- MINING TAB (KEEP EXISTING) -->
+        <!-- MINING TAB -->
         <div id="mining-tab" class="tab-pane active">
-            <!-- [KEEP ALL EXISTING MINING TAB CONTENT] -->
+            <!-- STATS GRID -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Mining Speed</div>
+                    <div class="stat-value">
+                        <span id="mining-speed">9</span><span class="stat-unit">s</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Per Cycle</div>
+                    <div class="stat-value">
+                        <span id="mining-amount">1.00e-14</span><span class="stat-unit">BTC</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Speed Level</div>
+                    <div class="stat-value">
+                        <span id="speed-level-display">0</span><span class="stat-unit">/10</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Efficiency</div>
+                    <div class="stat-value">
+                        <span id="efficiency-level-display">0</span><span class="stat-unit">x</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MINING SESSION TIMER -->
+            <div class="mining-timer">
+                <div class="timer-display" id="timer-display">--:--:--</div>
+                <div class="timer-label" id="timer-label">NO ACTIVE SESSION</div>
+            </div>
+
+            <!-- MINING PROGRESS -->
+            <div class="mining-section">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <div>
+                        <div style="font-size: 14px; color: #8a9aa8;">Current Session</div>
+                        <div style="font-size: 18px; font-weight: 600; color: white;" id="session-progress">No active session</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: #8a9aa8;">Next Reward</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #00c3ff;" id="next-reward">1.00e-14 BTC</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress" style="width: 0%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <span style="font-size: 12px; color: #5a6a78;">Cycle Progress</span>
+                        <span style="font-size: 12px; color: #00c3ff;" id="progress-text">0%</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="startMining()" id="mine-btn" style="margin-top: 25px;">
+                    ⚡ Start 2-Hour Mining Session
+                </button>
+
+                <div style="display: flex; gap: 20px; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 16px;">
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 13px; color: #8a9aa8;">Session Length</div>
+                        <div style="font-size: 16px; font-weight: 600; color: white;">2 Hours</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 13px; color: #8a9aa8;">Auto Mining</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #00c3ff;">Active</div>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 13px; color: #8a9aa8;">Next Upgrade</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #f7931a;">$29.99</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- UPGRADE TAB (KEEP EXISTING) -->
+        <!-- UPGRADE TAB -->
         <div id="upgrade-tab" class="tab-pane hidden">
-            <!-- [KEEP ALL EXISTING UPGRADE TAB CONTENT] -->
+            <!-- SPEED UPGRADE -->
+            <div class="upgrade-card">
+                <div class="upgrade-title">
+                    <span>⚡ Speed Acceleration</span>
+                    <span class="upgrade-price">$29.99</span>
+                </div>
+                <div class="upgrade-desc">
+                    Reduce mining cycle time by 3 seconds per level. Maximum 10 levels.
+                </div>
+                <div class="upgrade-stats">
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Current</div>
+                        <div class="upgrade-stat-value"><span id="current-mining-speed">9</span>s</div>
+                    </div>
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Next Level</div>
+                        <div class="upgrade-stat-value"><span id="next-speed">6</span>s</div>
+                    </div>
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Progress</div>
+                        <div class="upgrade-stat-value"><span id="speed-level">0</span>/10</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="buyUpgrade('speed')" id="speed-btn">
+                    Purchase Speed Upgrade - $29.99
+                </button>
+            </div>
+
+            <!-- EFFICIENCY UPGRADE -->
+            <div class="upgrade-card">
+                <div class="upgrade-title">
+                    <span>💎 Hashrate Multiplier</span>
+                    <span class="upgrade-price">$79.99</span>
+                </div>
+                <div class="upgrade-desc">
+                    Double mining output per cycle. Stackable up to 5 levels (32x multiplier).
+                </div>
+                <div class="upgrade-stats">
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Current</div>
+                        <div class="upgrade-stat-value"><span id="current-multiplier">1</span>x</div>
+                    </div>
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Next Level</div>
+                        <div class="upgrade-stat-value"><span id="next-multiplier">2</span>x</div>
+                    </div>
+                    <div class="upgrade-stat">
+                        <div class="upgrade-stat-label">Progress</div>
+                        <div class="upgrade-stat-value"><span id="efficiency-level">0</span>/5</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="buyUpgrade('efficiency')" id="efficiency-btn">
+                    Purchase Efficiency Upgrade - $79.99
+                </button>
+            </div>
+
+            <!-- PAYMENT INFORMATION -->
+            <div style="margin-top: 30px;">
+                <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 15px;">Payment Details</div>
+                <div style="background: rgba(8,12,18,0.8); border-radius: 24px; padding: 20px;">
+                    <p style="color: #8a9aa8; margin-bottom: 15px; font-size: 14px;">
+                        Send exact USDT (ERC-20) to the address below. Upgrades activate automatically upon confirmation.
+                    </p>
+                    
+                    <div class="address-card">
+                        <span class="address-text" id="eth-address">0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c</span>
+                        <button class="btn-icon" onclick="copyAddress()">Copy</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <div style="background: rgba(0,195,255,0.05); padding: 12px; border-radius: 12px;">
+                            <div style="font-size: 11px; color: #5a6a78;">NETWORK</div>
+                            <div style="font-size: 13px; color: white; font-weight: 600;">ERC-20</div>
+                        </div>
+                        <div style="background: rgba(247,147,26,0.05); padding: 12px; border-radius: 12px;">
+                            <div style="font-size: 11px; color: #5a6a78;">CONFIRMATIONS</div>
+                            <div style="font-size: 13px; color: white; font-weight: 600;">3 Blocks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- REFERRAL TAB - NEW -->
+        <!-- REFERRAL TAB - CLEAN & PROFESSIONAL -->
         <div id="referral-tab" class="tab-pane hidden">
-            <!-- REFERRAL HERO CARD -->
-            <div class="referral-card">
-                <h3 style="font-size: 22px; font-weight: 700; margin-bottom: 10px; color: white;">👥 Referral Program</h3>
-                <p style="color: #8a9aa8; margin-bottom: 20px;">Invite friends and earn 20% commission on their mining rewards — forever.</p>
-                <span class="commission-badge">🎁 20% LIFETIME COMMISSION</span>
+            <!-- REFERRAL HEADER CARD -->
+            <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,195,255,0.15); border-radius: 24px; padding: 25px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <div style="width: 50px; height: 50px; background: rgba(0,195,255,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 28px;">👥</span>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 20px; font-weight: 700; color: white; margin-bottom: 5px;">Referral Program</h3>
+                        <p style="color: #8a9aa8; font-size: 14px;">Earn 20% commission from friends' mining</p>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(247,147,26,0.1); border-radius: 12px; padding: 12px 16px; display: inline-block; margin-bottom: 10px;">
+                    <span style="color: #f7931a; font-weight: 600; font-size: 14px;">🎁 LIFETIME 20% COMMISSION</span>
+                </div>
             </div>
             
             <!-- REFERRAL CODE SECTION -->
-            <div style="background: rgba(8,12,18,0.8); border-radius: 24px; padding: 20px; margin-bottom: 20px;">
+            <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 25px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <span style="font-size: 16px; font-weight: 600; color: white;">Your Referral Code</span>
-                    <span style="font-size: 13px; color: #00c3ff;" id="referral-count">0 active</span>
+                    <span style="font-size: 13px; color: #00c3ff;" id="referral-count">0 referrals</span>
                 </div>
                 
-                <div class="referral-code-box">
-                    <span class="referral-code" id="referral-code">BTC-XXXX-XXXX</span>
-                    <button class="btn-icon" onclick="copyReferralCode()" style="width: auto; padding: 10px 20px;">Copy</button>
+                <!-- REFERRAL CODE BOX -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0,195,255,0.2); border-radius: 16px; padding: 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-family: 'Space Grotesk', monospace; font-size: 18px; font-weight: 700; color: #00c3ff; letter-spacing: 1px;" id="referral-code">BTC-XXXX-XXXX</span>
+                    <button class="btn-icon" onclick="copyReferralCode()" style="width: auto; padding: 10px 20px; background: rgba(0,195,255,0.1);">Copy</button>
                 </div>
                 
-                <div class="referral-link-box">
-                    <span class="referral-link-text" id="referral-link">https://t.me/Btcdkminingbot?start=ref_XXXX</span>
-                    <button class="btn-icon" onclick="copyReferralLink()" style="padding: 8px 16px; margin-left: 10px;">📋</button>
+                <!-- REFERRAL LINK BOX -->
+                <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 12px; color: #8a9aa8; font-family: monospace; word-break: break-all;" id="referral-link">https://t.me/Btcdkminingbot?start=ref_XXXX</span>
+                    <button class="btn-icon" onclick="copyReferralLink()" style="padding: 8px 16px; margin-left: 10px; background: rgba(255,255,255,0.05);">📋</button>
+                </div>
+                
+                <p style="color: #5a6a78; font-size: 12px; margin-top: 15px;">
+                    Share this link with friends. You earn 20% of everything they mine.
+                </p>
+            </div>
+            
+            <!-- REFERRAL STATISTICS - 2 CLEAN CARDS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px;">
+                    <div style="font-size: 13px; color: #8a9aa8; margin-bottom: 8px;">Commission Earned</div>
+                    <div style="font-size: 22px; font-weight: 700; color: #00c3ff;" id="referral-earnings">0.00000000</div>
+                    <div style="font-size: 11px; color: #5a6a78; margin-top: 5px;">BTC</div>
+                </div>
+                <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px;">
+                    <div style="font-size: 13px; color: #8a9aa8; margin-bottom: 8px;">Total Referrals</div>
+                    <div style="font-size: 22px; font-weight: 700; color: white;" id="referral-total">0</div>
+                    <div style="font-size: 11px; color: #5a6a78; margin-top: 5px;" id="referral-active">0 active</div>
                 </div>
             </div>
             
-            <!-- REFERRAL STATISTICS -->
-            <div class="referral-stats-grid">
-                <div class="referral-stat">
-                    <div class="referral-stat-value" id="referral-earnings">0.00000000</div>
-                    <div class="referral-stat-label">Commission Earned</div>
-                </div>
-                <div class="referral-stat">
-                    <div class="referral-stat-value" id="referral-count-stat">0</div>
-                    <div class="referral-stat-label">Total Referrals</div>
-                </div>
-                <div class="referral-stat">
-                    <div class="referral-stat-value" id="referral-active">0</div>
-                    <div class="referral-stat-label">Active Miners</div>
-                </div>
-                <div class="referral-stat">
-                    <div class="referral-stat-value" id="referral-rank">—</div>
-                    <div class="referral-stat-label">Your Rank</div>
-                </div>
-            </div>
-            
-            <!-- HOW IT WORKS & COMMISSION TIERS -->
-            <div style="background: rgba(8,12,18,0.8); border-radius: 24px; padding: 20px; margin-top: 20px;">
-                <h4 style="color: white; margin-bottom: 20px; font-size: 18px;">📊 Commission Structure</h4>
+            <!-- HOW IT WORKS - SIMPLE -->
+            <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 25px;">
+                <h4 style="color: white; font-size: 16px; font-weight: 600; margin-bottom: 20px;">How It Works</h4>
                 
-                <div class="tier-item">
-                    <div class="tier-level">
-                        <div class="tier-badge">1</div>
-                        <span style="color: white;">Direct Referrals</span>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 32px; height: 32px; background: rgba(0,195,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #00c3ff; font-weight: 700;">1</div>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 600; color: white;">Share your referral link</div>
+                            <div style="font-size: 13px; color: #8a9aa8;">Send to friends via Telegram</div>
+                        </div>
                     </div>
-                    <span class="tier-percentage">20%</span>
-                </div>
-                
-                <div class="tier-item">
-                    <div class="tier-level">
-                        <div class="tier-badge">2</div>
-                        <span style="color: white;">Second Level (referred by your referral)</span>
+                    
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 32px; height: 32px; background: rgba(0,195,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #00c3ff; font-weight: 700;">2</div>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 600; color: white;">Friends join and mine</div>
+                            <div style="font-size: 13px; color: #8a9aa8;">They start with 1e-14 BTC bonus</div>
+                        </div>
                     </div>
-                    <span class="tier-percentage">5%</span>
-                </div>
-                
-                <div class="tier-item">
-                    <div class="tier-level">
-                        <div class="tier-badge">3</div>
-                        <span style="color: white;">Third Level</span>
+                    
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 32px; height: 32px; background: rgba(247,147,26,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #f7931a; font-weight: 700;">3</div>
+                        <div>
+                            <div style="font-size: 15px; font-weight: 600; color: white;">You earn 20% forever</div>
+                            <div style="font-size: 13px; color: #8a9aa8;">Commission added to your balance instantly</div>
+                        </div>
                     </div>
-                    <span class="tier-percentage">2%</span>
                 </div>
                 
-                <div style="margin-top: 20px; padding: 15px; background: rgba(247,147,26,0.05); border-radius: 16px;">
-                    <p style="color: #f7931a; font-size: 13px; display: flex; align-items: center; gap: 10px;">
-                        <span>💎</span> Commission is credited instantly when your referrals mine
+                <div style="margin-top: 25px; padding: 15px; background: rgba(0,195,255,0.05); border-radius: 12px;">
+                    <p style="color: #00c3ff; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+                        <span>💎</span> No limits. Unlimited referrals. Lifetime commission.
                     </p>
-                </div>
-            </div>
-            
-            <!-- REFERRAL LEADERBOARD (OPTIONAL) -->
-            <div style="margin-top: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <span style="font-size: 16px; font-weight: 600; color: white;">🏆 Top Referrers</span>
-                    <span style="font-size: 12px; color: #5a6a78;">This Month</span>
-                </div>
-                
-                <div id="referral-leaderboard" style="background: rgba(8,12,18,0.6); border-radius: 16px; padding: 15px;">
-                    <!-- Will be populated by JavaScript -->
-                    <div style="text-align: center; padding: 20px; color: #5a6a78;">
-                        Be the first to refer a friend!
-                    </div>
-                </div>
-            </div>
-            
-            <!-- REFERRAL HISTORY -->
-            <div style="margin-top: 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <span style="font-size: 16px; font-weight: 600; color: white;">📋 Recent Referrals</span>
-                    <span style="font-size: 12px; color: #5a6a78;">Last 30 days</span>
-                </div>
-                
-                <div id="referral-history-list" style="background: rgba(8,12,18,0.6); border-radius: 16px; padding: 15px;">
-                    <!-- Will be populated by JavaScript -->
-                    <div style="text-align: center; padding: 20px; color: #5a6a78;">
-                        No referrals yet. Share your code!
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- WITHDRAW TAB (KEEP EXISTING) -->
+        <!-- WITHDRAW TAB -->
         <div id="withdraw-tab" class="tab-pane hidden">
-            <!-- [KEEP ALL EXISTING WITHDRAW TAB CONTENT] -->
+            <div class="withdraw-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <div style="font-size: 14px; color: #8a9aa8;">Available Balance</div>
+                        <div style="font-size: 28px; font-weight: 700; color: white;">
+                            <span id="available-balance">1.00e-14</span> BTC
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px; color: #8a9aa8;">≈ USD</div>
+                        <div style="font-size: 20px; font-weight: 600; color: #00c3ff;">
+                            $<span id="available-usd">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Withdrawal Amount (BTC)</label>
+                    <input type="number" id="withdraw-amount" class="input-field" 
+                           placeholder="0.00100000" step="0.00000001" min="0.001" max="10">
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                        <span style="font-size: 12px; color: #f7931a;">Minimum: 0.001 BTC</span>
+                        <span style="font-size: 12px; color: #00c3ff; cursor: pointer;" onclick="setMaxWithdraw()">Max</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Bitcoin Wallet Address</label>
+                    <input type="text" id="wallet-address" class="input-field" 
+                           placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
+                </div>
+
+                <div class="fee-info">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Network Fee</span>
+                        <span style="font-weight: 600;">0.0001 BTC</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>You Receive</span>
+                        <span style="font-weight: 600; color: white;" id="receive-amount">-</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="withdraw()" id="withdraw-btn" style="background: linear-gradient(135deg, #f7931a, #e67e22);">
+                    💰 Process Withdrawal
+                </button>
+
+                <!-- WITHDRAWAL HISTORY -->
+                <div style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 16px; font-weight: 600; color: white;">Withdrawal History</span>
+                        <span style="font-size: 12px; color: #5a6a78;">Last 30 days</span>
+                    </div>
+                    <div id="history-list">
+                        <div style="text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 16px; color: #5a6a78;">
+                            No withdrawal history
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- FOOTER -->
@@ -320,7 +969,14 @@
 
     <script src="script.js"></script>
     <script>
-        // Tab switching with smooth transition
+        // Telegram Web App initialization
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+            tg.ready();
+        }
+
+        // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -334,26 +990,61 @@
                 document.getElementById(`${tabId}-tab`).classList.remove('hidden');
             });
         });
-        
-        // Copy referral code
-        function copyReferralCode() {
-            const code = document.getElementById('referral-code')?.textContent || '';
-            navigator.clipboard.writeText(code).then(() => {
-                if (window.Telegram?.WebApp) {
-                    window.Telegram.WebApp.showAlert('✓ Referral code copied!');
-                }
+
+        // Copy ETH address
+        function copyAddress() {
+            const address = "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c";
+            navigator.clipboard.writeText(address).then(() => {
+                if (tg) tg.showAlert('✓ Address copied to clipboard');
             });
         }
-        
+
+        // Copy referral code
+        function copyReferralCode() {
+            const code = document.getElementById('referral-code')?.textContent || 'BTC-XXXX-XXXX';
+            navigator.clipboard.writeText(code).then(() => {
+                if (tg) tg.showAlert('✓ Referral code copied');
+            });
+        }
+
         // Copy referral link
         function copyReferralLink() {
             const link = document.getElementById('referral-link')?.textContent || '';
             navigator.clipboard.writeText(link).then(() => {
-                if (window.Telegram?.WebApp) {
-                    window.Telegram.WebApp.showAlert('✓ Referral link copied!\nShare with friends to earn 20%');
-                }
+                if (tg) tg.showAlert('✓ Referral link copied\nShare with friends to earn 20%');
             });
         }
+
+        // Set max withdraw amount
+        function setMaxWithdraw() {
+            const balanceEl = document.getElementById('balance');
+            if (balanceEl) {
+                const balance = parseFloat(balanceEl.textContent) || 0;
+                const input = document.getElementById('withdraw-amount');
+                if (input) {
+                    input.value = Math.min(balance, 10).toFixed(8);
+                    updateReceiveAmount();
+                }
+            }
+        }
+
+        // Update receive amount
+        function updateReceiveAmount() {
+            const amount = parseFloat(document.getElementById('withdraw-amount')?.value || '0');
+            const receive = amount - 0.0001;
+            const receiveEl = document.getElementById('receive-amount');
+            if (receiveEl) {
+                receiveEl.textContent = receive > 0 ? receive.toFixed(8) + ' BTC' : '0.00000000 BTC';
+            }
+        }
+
+        // Initialize withdraw amount listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const withdrawInput = document.getElementById('withdraw-amount');
+            if (withdrawInput) {
+                withdrawInput.addEventListener('input', updateReceiveAmount);
+            }
+        });
     </script>
 </body>
 </html>
