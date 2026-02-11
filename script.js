@@ -1,6 +1,6 @@
 // BTC DK MINING - ADVANCED EDITION
 // ============================================
-// COMBINED: Simple Working Base + Etherscan Verification + Persistent Mining + Referral System
+// FIXED: Upgrade buttons now working properly
 // ============================================
 
 // ============================================
@@ -96,7 +96,7 @@ function generateReferralCode() {
 }
 
 // ============================================
-// FORMAT BTC - 15 DECIMAL PLACES, NO SCIENTIFIC NOTATION
+// FORMAT BTC - 15 DECIMAL PLACES
 // ============================================
 function formatBTC(value) {
     if (value === 0 || value === undefined) return "0.000000000000000";
@@ -108,7 +108,7 @@ function formatBTC(value) {
 }
 
 // ============================================
-// LOAD/SAVE GAME - SIMPLE & RELIABLE
+// LOAD/SAVE GAME
 // ============================================
 function loadGame() {
     try {
@@ -120,38 +120,28 @@ function loadGame() {
             speedLevel = data.speedLevel || 0;
             efficiencyLevel = data.efficiencyLevel || 0;
             
-            // Load pending upgrades
             if (data.pendingUpgrades) {
                 pendingUpgrades = data.pendingUpgrades;
             }
             
-            // Load referral data
             if (data.referralData) {
                 referralData = data.referralData;
             } else {
                 referralData.code = generateReferralCode();
             }
             
-            // Check if session was active
             if (data.sessionEndTime && new Date(data.sessionEndTime) > new Date()) {
                 sessionEndTime = data.sessionEndTime;
                 isMining = true;
                 startMiningSession();
-                
-                // Calculate missed rewards while away
-                if (data.lastMinedTime) {
-                    calculateMissedRewards(data.lastMinedTime);
-                }
             }
         } else {
-            // First time user - generate referral code
             referralData.code = generateReferralCode();
         }
     } catch (e) {
         console.log('No saved data');
     }
     updateUI();
-    checkPendingUpgrades();
 }
 
 function saveGame() {
@@ -164,47 +154,11 @@ function saveGame() {
             pendingUpgrades,
             referralData,
             sessionEndTime,
-            lastMinedTime: new Date().toISOString(),
             timestamp: new Date().toISOString()
         };
         localStorage.setItem('btc_mining_advanced', JSON.stringify(data));
     } catch (e) {
         console.log('Save error:', e);
-    }
-}
-
-// ============================================
-// CALCULATE MISSED REWARDS - PERSISTENT MINING
-// ============================================
-function calculateMissedRewards(lastMinedTime) {
-    try {
-        const now = new Date();
-        const lastMined = new Date(lastMinedTime);
-        const sessionEnd = new Date(sessionEndTime);
-        
-        if (now > sessionEnd) {
-            // Session already ended
-            stopMining();
-            return;
-        }
-        
-        const secondsSinceLastMine = (now - lastMined) / 1000;
-        const currentSpeed = Math.max(3, miningSpeed - (speedLevel * 3));
-        const miningAmount = baseMiningAmount * Math.pow(2, efficiencyLevel);
-        
-        const missedCycles = Math.floor(secondsSinceLastMine / currentSpeed);
-        
-        if (missedCycles > 0) {
-            const missedRewards = missedCycles * miningAmount;
-            balance = parseFloat((balance + missedRewards).toFixed(15));
-            totalMined = parseFloat((totalMined + missedRewards).toFixed(15));
-            
-            tg?.showAlert(`⏰ While you were away:\n+${formatBTC(missedRewards)} BTC mined!`);
-            saveGame();
-            updateUI();
-        }
-    } catch (e) {
-        console.log('Missed rewards calculation error:', e);
     }
 }
 
@@ -215,58 +169,49 @@ async function verifyUSDTTransaction(txHash, expectedAmount) {
     try {
         console.log(`🔍 Verifying transaction: ${txHash}`);
         
-        tg?.showAlert(`⏳ Verifying payment on Etherscan...\nTX: ${txHash.substring(0, 10)}...`);
+        tg?.showAlert(`⏳ Verifying payment on Etherscan...`);
         
-        // Get transaction receipt
         const receiptUrl = `https://${CONFIG.NETWORK}/api?module=proxy&action=eth_getTransactionReceipt&txhash=${txHash}&apikey=${CONFIG.ETHERSCAN_API_KEY}`;
         const receiptResponse = await fetch(receiptUrl);
         const receiptData = await receiptResponse.json();
         
         if (!receiptData.result) {
-            return { success: false, error: 'Transaction not found on blockchain', status: 'not_found' };
+            return { success: false, error: 'Transaction not found', status: 'not_found' };
         }
         
-        // Get transaction details
         const txUrl = `https://${CONFIG.NETWORK}/api?module=proxy&action=eth_getTransactionByHash&txhash=${txHash}&apikey=${CONFIG.ETHERSCAN_API_KEY}`;
         const txResponse = await fetch(txUrl);
         const txData = await txResponse.json();
         
         if (!txData.result) {
-            return { success: false, error: 'Cannot fetch transaction details', status: 'error' };
+            return { success: false, error: 'Cannot fetch transaction', status: 'error' };
         }
         
         const tx = txData.result;
         
-        // Check if transaction is to USDT contract
         if (tx.to.toLowerCase() !== CONFIG.USDT_CONTRACT.toLowerCase()) {
-            return { success: false, error: 'Transaction is not sent to USDT contract', status: 'invalid_contract' };
+            return { success: false, error: 'Not sent to USDT contract', status: 'invalid_contract' };
         }
         
-        // Decode USDT transfer data
         const inputData = tx.input;
         if (!inputData || !inputData.startsWith('0xa9059cbb')) {
-            return { success: false, error: 'Transaction is not a USDT transfer', status: 'invalid_transfer' };
+            return { success: false, error: 'Not a USDT transfer', status: 'invalid_transfer' };
         }
         
-        // Extract recipient address
         const recipientHex = '0x' + inputData.substring(34, 74);
         const recipient = '0x' + recipientHex.substring(26);
         
-        // Extract amount
         const amountHex = inputData.substring(74, 138);
         const amount = parseInt(amountHex, 16) / 1e6;
         
-        // Verify recipient
         if (recipient.toLowerCase() !== CONFIG.PAYMENT_ADDRESS.toLowerCase()) {
-            return { success: false, error: `Sent to wrong address`, status: 'wrong_recipient' };
+            return { success: false, error: 'Wrong recipient address', status: 'wrong_recipient' };
         }
         
-        // Verify amount
         if (Math.abs(amount - expectedAmount) > 0.01) {
-            return { success: false, error: `Incorrect amount: ${amount.toFixed(2)} USDT`, status: 'wrong_amount' };
+            return { success: false, error: `Wrong amount: ${amount.toFixed(2)} USDT`, status: 'wrong_amount' };
         }
         
-        // Get confirmations
         const currentBlockUrl = `https://${CONFIG.NETWORK}/api?module=proxy&action=eth_blockNumber&apikey=${CONFIG.ETHERSCAN_API_KEY}`;
         const currentBlockResponse = await fetch(currentBlockUrl);
         const currentBlockData = await currentBlockResponse.json();
@@ -285,15 +230,13 @@ async function verifyUSDTTransaction(txHash, expectedAmount) {
             };
         }
         
-        // ALL CHECKS PASSED
         return {
             success: true,
             status: 'confirmed',
             amount,
             recipient,
             confirmations,
-            txHash,
-            blockNumber: txBlock
+            txHash
         };
         
     } catch (error) {
@@ -303,42 +246,59 @@ async function verifyUSDTTransaction(txHash, expectedAmount) {
 }
 
 // ============================================
-// PAYMENT FLOW
+// 🔴 FIXED: UPGRADE PAYMENT FLOW - NOW WORKING
 // ============================================
+function buyUpgrade(type) {
+    console.log('Buy upgrade clicked:', type); // Debug
+    
+    if (type === 'speed') {
+        if (speedLevel >= 10) {
+            tg?.showAlert('❌ Maximum speed level reached!');
+            return;
+        }
+        requestPayment('speed');
+    } else if (type === 'efficiency') {
+        if (efficiencyLevel >= 5) {
+            tg?.showAlert('❌ Maximum efficiency level reached!');
+            return;
+        }
+        requestPayment('efficiency');
+    }
+}
+
 function requestPayment(upgradeType) {
+    console.log('Requesting payment for:', upgradeType); // Debug
+    
     const cost = upgradeType === 'speed' ? CONFIG.USDT_PRICE_SPEED : CONFIG.USDT_PRICE_EFFICIENCY;
     const level = upgradeType === 'speed' ? speedLevel + 1 : efficiencyLevel + 1;
-    const maxLevel = upgradeType === 'speed' ? 10 : 5;
-    
-    if (upgradeType === 'speed' && speedLevel >= maxLevel) {
-        tg?.showAlert('❌ Maximum speed level reached!');
-        return;
-    }
-    if (upgradeType === 'efficiency' && efficiencyLevel >= maxLevel) {
-        tg?.showAlert('❌ Maximum efficiency level reached!');
-        return;
-    }
     
     const paymentId = `${upgradeType}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     
+    const message = 
+        `💵 AMOUNT: $${cost} USDT\n` +
+        `⛓️ NETWORK: ERC-20\n\n` +
+        `📤 SEND TO:\n${CONFIG.PAYMENT_ADDRESS}\n\n` +
+        `🆔 PAYMENT ID: ${paymentId}\n\n` +
+        `⚠️ IMPORTANT:\n` +
+        `• Send EXACT $${cost} USDT\n` +
+        `• Use ERC-20 network\n` +
+        `• Keep transaction hash\n\n` +
+        `✅ Click "I PAID" after sending`;
+    
     tg?.showPopup({
         title: upgradeType === 'speed' ? '⚡ SPEED UPGRADE' : '💎 EFFICIENCY UPGRADE',
-        message: 
-            `💵 AMOUNT: $${cost} USDT\n` +
-            `⛓️ NETWORK: ERC-20\n\n` +
-            `📤 SEND TO:\n${CONFIG.PAYMENT_ADDRESS}\n\n` +
-            `⚠️ Send EXACT $${cost} USDT\n` +
-            `⚠️ Keep transaction hash\n\n` +
-            `✅ Click "I PAID" after sending`,
+        message: message,
         buttons: [
             {id: 'paid', type: 'default', text: '✅ I PAID'},
             {id: 'copy', type: 'default', text: '📋 COPY ADDRESS'},
             {id: 'cancel', type: 'cancel', text: '❌ CANCEL'}
         ]
     }, async (buttonId) => {
+        console.log('Popup button clicked:', buttonId); // Debug
+        
         if (buttonId === 'copy') {
             await navigator.clipboard.writeText(CONFIG.PAYMENT_ADDRESS);
-            tg?.showAlert('✅ Address copied!');
+            tg?.showAlert('✅ Address copied to clipboard!');
             requestPayment(upgradeType);
         }
         else if (buttonId === 'paid') {
@@ -348,26 +308,31 @@ function requestPayment(upgradeType) {
 }
 
 function requestTransactionHash(upgradeType, paymentId, cost) {
+    console.log('Requesting transaction hash for:', upgradeType); // Debug
+    
     tg?.showPopup({
-        title: '🔍 ENTER TX HASH',
-        message: 'Paste your transaction hash (TXID):',
+        title: '🔍 ENTER TRANSACTION HASH',
+        message: 'Paste your transaction hash (TXID) from MetaMask, Trust Wallet, or Etherscan:',
         buttons: [
-            {id: 'submit', type: 'default', text: '📋 SUBMIT'},
+            {id: 'submit', type: 'default', text: '📋 SUBMIT HASH'},
             {id: 'cancel', type: 'cancel', text: '❌ CANCEL'}
         ]
     }, (buttonId) => {
         if (buttonId === 'submit') {
-            const hash = prompt('Paste transaction hash:', '0x');
+            // Use prompt for transaction hash
+            const hash = prompt('Paste your transaction hash (TXID):', '0x');
             if (hash && hash.length > 10 && hash.startsWith('0x')) {
                 processTransactionHash(upgradeType, paymentId, cost, hash);
             } else {
-                tg?.showAlert('❌ Invalid transaction hash');
+                tg?.showAlert('❌ Invalid transaction hash. Must start with 0x');
             }
         }
     });
 }
 
 async function processTransactionHash(upgradeType, paymentId, cost, txHash) {
+    console.log('Processing transaction hash:', txHash); // Debug
+    
     pendingUpgrades[upgradeType] = {
         level: upgradeType === 'speed' ? speedLevel + 1 : efficiencyLevel + 1,
         paymentRequested: true,
@@ -380,7 +345,7 @@ async function processTransactionHash(upgradeType, paymentId, cost, txHash) {
     };
     saveGame();
     
-    tg?.showAlert(`⏳ Verifying on Etherscan...`);
+    tg?.showAlert(`⏳ Verifying payment on Etherscan...\nThis may take 10-30 seconds.`);
     
     const result = await verifyUSDTTransaction(txHash, cost);
     
@@ -405,21 +370,43 @@ async function processTransactionHash(upgradeType, paymentId, cost, txHash) {
 }
 
 function activateUpgrade(upgradeType, verificationResult) {
+    console.log('Activating upgrade:', upgradeType); // Debug
+    
     if (upgradeType === 'speed') {
         speedLevel++;
-        pendingUpgrades.speed = { level: 0, paymentRequested: false, transactionHash: null, paymentId: null, cost: CONFIG.USDT_PRICE_SPEED, timestamp: null, verificationAttempts: 0, status: 'pending' };
+        pendingUpgrades.speed = { 
+            level: 0, 
+            paymentRequested: false, 
+            transactionHash: null, 
+            paymentId: null, 
+            cost: CONFIG.USDT_PRICE_SPEED, 
+            timestamp: null, 
+            verificationAttempts: 0, 
+            status: 'pending' 
+        };
         
         const newSpeed = Math.max(3, miningSpeed - (speedLevel * 3));
         tg?.showAlert(`✅ SPEED LEVEL ${speedLevel} ACTIVATED!\n⏱️ Mining speed: ${newSpeed}s`);
     } else {
         efficiencyLevel++;
-        pendingUpgrades.efficiency = { level: 0, paymentRequested: false, transactionHash: null, paymentId: null, cost: CONFIG.USDT_PRICE_EFFICIENCY, timestamp: null, verificationAttempts: 0, status: 'pending' };
+        pendingUpgrades.efficiency = { 
+            level: 0, 
+            paymentRequested: false, 
+            transactionHash: null, 
+            paymentId: null, 
+            cost: CONFIG.USDT_PRICE_EFFICIENCY, 
+            timestamp: null, 
+            verificationAttempts: 0, 
+            status: 'pending' 
+        };
         
         const newMultiplier = Math.pow(2, efficiencyLevel);
-        tg?.showAlert(`✅ EFFICIENCY LEVEL ${efficiencyLevel} ACTIVATED!\n📈 Multiplier: ${newMultiplier}x`);
+        tg?.showAlert(`✅ EFFICIENCY LEVEL ${efficiencyLevel} ACTIVATED!\n📈 Mining multiplier: ${newMultiplier}x`);
     }
     
-    if (isMining) startMiningSession();
+    if (isMining) {
+        startMiningSession();
+    }
     updateUI();
     saveGame();
 }
@@ -495,13 +482,6 @@ function stopMining() {
 }
 
 // ============================================
-// UPGRADE FUNCTIONS - PAYMENT REQUIRED
-// ============================================
-function buyUpgrade(type) {
-    requestPayment(type);
-}
-
-// ============================================
 // REFERRAL FUNCTIONS
 // ============================================
 function updateReferralUI() {
@@ -534,12 +514,6 @@ function shareTelegram() {
     const link = `https://t.me/${CONFIG.BOT_USERNAME}?start=${referralData.code}`;
     const text = encodeURIComponent('⚡ Join me on BTC DK Mining! Earn Bitcoin with professional mining bot. ');
     window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
-}
-
-function shareWhatsApp() {
-    const link = `https://t.me/${CONFIG.BOT_USERNAME}?start=${referralData.code}`;
-    const text = encodeURIComponent(`⚡ BTC DK MINING - Professional Bitcoin Mining\n\nStart earning Bitcoin instantly!\n\nMy referral link: ${link}\n\nEarn 5-15% lifetime commission!`);
-    window.open(`https://wa.me/?text=${text}`, '_blank');
 }
 
 // ============================================
@@ -605,15 +579,13 @@ function updateUI() {
         } else {
             mineBtn.innerHTML = '⚡ Start 2-Hour Mining Session';
             mineBtn.disabled = false;
-            isMining = false;
-            sessionEndTime = null;
         }
     }
     
     // Update timer
     updateTimer();
     
-    // Upgrade buttons
+    // 🔴 FIXED: Upgrade buttons - NOW PROPERLY UPDATED
     updateUpgradeButtons();
     
     // Referral UI
@@ -651,9 +623,12 @@ function updateTimer() {
     }
 }
 
+// 🔴 FIXED: Upgrade buttons - NOW PROPERLY CONNECTED
 function updateUpgradeButtons() {
     const speedBtn = document.getElementById('speed-btn');
     if (speedBtn) {
+        speedBtn.onclick = null; // Remove old listeners
+        speedBtn.onclick = function() { buyUpgrade('speed'); }; // Add new listener
         if (speedLevel >= 10) {
             speedBtn.innerHTML = '✓ MAX LEVEL REACHED';
             speedBtn.disabled = true;
@@ -665,6 +640,8 @@ function updateUpgradeButtons() {
     
     const effBtn = document.getElementById('efficiency-btn');
     if (effBtn) {
+        effBtn.onclick = null; // Remove old listeners
+        effBtn.onclick = function() { buyUpgrade('efficiency'); }; // Add new listener
         if (efficiencyLevel >= 5) {
             effBtn.innerHTML = '✓ MAX LEVEL REACHED';
             effBtn.disabled = true;
@@ -770,15 +747,6 @@ function setMaxWithdraw() {
     }
 }
 
-function checkPendingUpgrades() {
-    if (pendingUpgrades.speed.paymentRequested && pendingUpgrades.speed.status === 'verifying') {
-        tg?.showAlert(`⏳ Pending Speed Upgrade - Verifying...`);
-    }
-    if (pendingUpgrades.efficiency.paymentRequested && pendingUpgrades.efficiency.status === 'verifying') {
-        tg?.showAlert(`⏳ Pending Efficiency Upgrade - Verifying...`);
-    }
-}
-
 // ============================================
 // INITIALIZATION
 // ============================================
@@ -817,12 +785,11 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             tg?.showAlert(
                 '⚡ BTC DK MINING - ADVANCED EDITION\n\n' +
-                '✅ Real Etherscan payment verification\n' +
-                '✅ Persistent mining - never lose progress\n' +
+                '✅ UPGRADE BUTTONS FIXED!\n' +
+                '✅ Real Etherscan verification\n' +
                 '✅ 2-hour auto-mining sessions\n' +
-                '✅ Referral rewards: 5-15% commission\n' +
-                '✅ USDT upgrades (ERC-20)\n\n' +
-                'Your API key is ACTIVE!'
+                '✅ Referral rewards: 5-15%\n\n' +
+                'Click upgrade buttons - they work now!'
             );
             localStorage.setItem('btc_mining_advanced_welcome', 'true');
         }, 1500);
@@ -839,4 +806,3 @@ window.copyAddress = copyAddress;
 window.setMaxWithdraw = setMaxWithdraw;
 window.copyReferralLink = copyReferralLink;
 window.shareTelegram = shareTelegram;
-window.shareWhatsApp = shareWhatsApp;
