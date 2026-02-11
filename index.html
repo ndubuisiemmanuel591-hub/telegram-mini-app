@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* [KEEP ALL EXISTING STYLES - same as before] */
+        /* PROFESSIONAL ELECTRIC - ADULT ORIENTED */
         * {
             margin: 0;
             padding: 0;
@@ -145,7 +145,7 @@
         }
 
         .balance {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             font-family: 'Space Grotesk', monospace;
             color: #00c3ff;
@@ -238,10 +238,11 @@
         }
 
         .stat-value {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             font-family: 'Space Grotesk', sans-serif;
             color: white;
+            word-break: break-all;
         }
 
         .stat-unit {
@@ -549,16 +550,16 @@
         @media (max-width: 480px) {
             .container { padding: 16px; }
             .header h1 { font-size: 22px; }
-            .balance { font-size: 20px; }
+            .balance { font-size: 18px; }
             .timer-display { font-size: 36px; }
-            .stat-value { font-size: 20px; }
+            .stat-value { font-size: 18px; }
             .tab { font-size: 13px; padding: 12px 4px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HEADER - PREMIUM -->
+        <!-- HEADER -->
         <div class="header">
             <h1>BTC DK MINING</h1>
             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
@@ -567,17 +568,17 @@
                         <span id="balance">0.000000000000000</span> <small>BTC</small>
                     </div>
                     <div class="balance-usd">
-                        ≈ $<span id="balance-usd">0.0000</span> USD
+                        ≈ $<span id="balance-usd">0.00000000</span> USD
                     </div>
                 </div>
                 <div style="text-align: right;">
                     <div style="font-size: 13px; color: #8a9aa8;">MINED TOTAL</div>
-                    <div style="font-size: 18px; font-weight: 600; color: white;" id="total-mined">0.000000000000000</div>
+                    <div style="font-size: 18px; font-weight: 600; color: white; word-break: break-all;" id="total-mined">0.000000000000000</div>
                 </div>
             </div>
         </div>
 
-        <!-- NAVIGATION - 4 TABS -->
+        <!-- NAVIGATION TABS -->
         <div class="tabs">
             <button class="tab active" data-tab="mining">⛏️ Mining</button>
             <button class="tab" data-tab="upgrade">⚡ Upgrade</button>
@@ -587,7 +588,6 @@
 
         <!-- MINING TAB -->
         <div id="mining-tab" class="tab-pane active">
-            <!-- STATS GRID -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Mining Speed</div>
@@ -615,13 +615,11 @@
                 </div>
             </div>
 
-            <!-- MINING SESSION TIMER -->
             <div class="mining-timer">
                 <div class="timer-display" id="timer-display">--:--:--</div>
                 <div class="timer-label" id="timer-label">NO ACTIVE SESSION</div>
             </div>
 
-            <!-- MINING PROGRESS -->
             <div class="mining-section">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                     <div>
@@ -630,7 +628,7 @@
                     </div>
                     <div>
                         <div style="font-size: 14px; color: #8a9aa8;">Next Reward</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #00c3ff;" id="next-reward">0.000000000000000 BTC</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #00c3ff; word-break: break-all;" id="next-reward">0.000000000000000 BTC</div>
                     </div>
                 </div>
 
@@ -644,7 +642,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary" onclick="startMining()" id="mine-btn" style="margin-top: 25px;">
+                <button class="btn btn-primary" onclick="window.startMining ? window.startMining() : alert('Loading...')" id="mine-btn">
                     ⚡ Start 2-Hour Mining Session
                 </button>
 
@@ -655,7 +653,7 @@
                     </div>
                     <div style="flex: 1; text-align: center;">
                         <div style="font-size: 13px; color: #8a9aa8;">Auto Mining</div>
-                        <div style="font-size: 16px; font-weight: 600; color: #00c3ff;">Active</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #00c3ff;" id="auto-mining-status">Inactive</div>
                     </div>
                     <div style="flex: 1; text-align: center;">
                         <div style="font-size: 13px; color: #8a9aa8;">Next Upgrade</div>
@@ -667,11 +665,10 @@
 
         <!-- UPGRADE TAB -->
         <div id="upgrade-tab" class="tab-pane hidden">
-            <!-- SPEED UPGRADE -->
             <div class="upgrade-card">
                 <div class="upgrade-title">
                     <span>⚡ Speed Acceleration</span>
-                    <span class="upgrade-price">$29.99</span>
+                    <span class="upgrade-price" id="speed-cost">$29.99</span>
                 </div>
                 <div class="upgrade-desc">
                     Reduce mining cycle time by 3 seconds per level. Maximum 10 levels.
@@ -690,16 +687,15 @@
                         <div class="upgrade-stat-value"><span id="speed-level">0</span>/10</div>
                     </div>
                 </div>
-                <button class="btn btn-secondary" onclick="buyUpgrade('speed')" id="speed-btn">
+                <button class="btn btn-secondary" onclick="window.buyUpgrade ? window.buyUpgrade('speed') : alert('Loading...')" id="speed-btn">
                     Purchase Speed Upgrade - $29.99
                 </button>
             </div>
 
-            <!-- EFFICIENCY UPGRADE -->
             <div class="upgrade-card">
                 <div class="upgrade-title">
                     <span>💎 Hashrate Multiplier</span>
-                    <span class="upgrade-price">$79.99</span>
+                    <span class="upgrade-price" id="efficiency-cost">$79.99</span>
                 </div>
                 <div class="upgrade-desc">
                     Double mining output per cycle. Stackable up to 5 levels (32x multiplier).
@@ -718,12 +714,11 @@
                         <div class="upgrade-stat-value"><span id="efficiency-level">0</span>/5</div>
                     </div>
                 </div>
-                <button class="btn btn-secondary" onclick="buyUpgrade('efficiency')" id="efficiency-btn">
+                <button class="btn btn-secondary" onclick="window.buyUpgrade ? window.buyUpgrade('efficiency') : alert('Loading...')" id="efficiency-btn">
                     Purchase Efficiency Upgrade - $79.99
                 </button>
             </div>
 
-            <!-- PAYMENT INFORMATION -->
             <div style="margin-top: 30px;">
                 <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 15px;">Payment Details</div>
                 <div style="background: rgba(8,12,18,0.8); border-radius: 24px; padding: 20px;">
@@ -733,7 +728,7 @@
                     
                     <div class="address-card">
                         <span class="address-text" id="eth-address">0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c</span>
-                        <button class="btn-icon" onclick="copyAddress()">Copy</button>
+                        <button class="btn-icon" onclick="window.copyAddress ? window.copyAddress() : alert('Loading...')">Copy</button>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
@@ -750,9 +745,8 @@
             </div>
         </div>
 
-        <!-- REFERRAL TAB - CLEAN & PROFESSIONAL -->
+        <!-- REFERRAL TAB -->
         <div id="referral-tab" class="tab-pane hidden">
-            <!-- REFERRAL HEADER CARD -->
             <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,195,255,0.15); border-radius: 24px; padding: 25px; margin-bottom: 20px;">
                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
                     <div style="width: 50px; height: 50px; background: rgba(0,195,255,0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
@@ -769,23 +763,20 @@
                 </div>
             </div>
             
-            <!-- REFERRAL CODE SECTION -->
             <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 25px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <span style="font-size: 16px; font-weight: 600; color: white;">Your Referral Code</span>
                     <span style="font-size: 13px; color: #00c3ff;" id="referral-count">0 referrals</span>
                 </div>
                 
-                <!-- REFERRAL CODE BOX -->
                 <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0,195,255,0.2); border-radius: 16px; padding: 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-family: 'Space Grotesk', monospace; font-size: 18px; font-weight: 700; color: #00c3ff; letter-spacing: 1px;" id="referral-code">BTC-XXXX-XXXX</span>
-                    <button class="btn-icon" onclick="copyReferralCode()" style="width: auto; padding: 10px 20px; background: rgba(0,195,255,0.1);">Copy</button>
+                    <button class="btn-icon" onclick="window.copyReferralCode ? window.copyReferralCode() : alert('Loading...')" style="width: auto; padding: 10px 20px; background: rgba(0,195,255,0.1);">Copy</button>
                 </div>
                 
-                <!-- REFERRAL LINK BOX -->
                 <div style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 12px; color: #8a9aa8; font-family: monospace; word-break: break-all;" id="referral-link">https://t.me/Btcdkminingbot?start=ref_XXXX</span>
-                    <button class="btn-icon" onclick="copyReferralLink()" style="padding: 8px 16px; margin-left: 10px; background: rgba(255,255,255,0.05);">📋</button>
+                    <button class="btn-icon" onclick="window.copyReferralLink ? window.copyReferralLink() : alert('Loading...')" style="padding: 8px 16px; margin-left: 10px; background: rgba(255,255,255,0.05);">📋</button>
                 </div>
                 
                 <p style="color: #5a6a78; font-size: 12px; margin-top: 15px;">
@@ -793,217 +784,6 @@
                 </p>
             </div>
             
-            <!-- REFERRAL STATISTICS - 2 CLEAN CARDS -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
                 <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px;">
                     <div style="font-size: 13px; color: #8a9aa8; margin-bottom: 8px;">Commission Earned</div>
-                    <div style="font-size: 22px; font-weight: 700; color: #00c3ff;" id="referral-earnings">0.00000000</div>
-                    <div style="font-size: 11px; color: #5a6a78; margin-top: 5px;">BTC</div>
-                </div>
-                <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px;">
-                    <div style="font-size: 13px; color: #8a9aa8; margin-bottom: 8px;">Total Referrals</div>
-                    <div style="font-size: 22px; font-weight: 700; color: white;" id="referral-total">0</div>
-                    <div style="font-size: 11px; color: #5a6a78; margin-top: 5px;" id="referral-active">0 active</div>
-                </div>
-            </div>
-            
-            <!-- HOW IT WORKS - SIMPLE -->
-            <div style="background: rgba(8,12,18,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 25px;">
-                <h4 style="color: white; font-size: 16px; font-weight: 600; margin-bottom: 20px;">How It Works</h4>
-                
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 32px; height: 32px; background: rgba(0,195,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #00c3ff; font-weight: 700;">1</div>
-                        <div>
-                            <div style="font-size: 15px; font-weight: 600; color: white;">Share your referral link</div>
-                            <div style="font-size: 13px; color: #8a9aa8;">Send to friends via Telegram</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 32px; height: 32px; background: rgba(0,195,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #00c3ff; font-weight: 700;">2</div>
-                        <div>
-                            <div style="font-size: 15px; font-weight: 600; color: white;">Friends join and mine</div>
-                            <div style="font-size: 13px; color: #8a9aa8;">They start with 0.000000000000000 BTC</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 32px; height: 32px; background: rgba(247,147,26,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #f7931a; font-weight: 700;">3</div>
-                        <div>
-                            <div style="font-size: 15px; font-weight: 600; color: white;">You earn 20% forever</div>
-                            <div style="font-size: 13px; color: #8a9aa8;">Commission added to your balance instantly</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 25px; padding: 15px; background: rgba(0,195,255,0.05); border-radius: 12px;">
-                    <p style="color: #00c3ff; font-size: 13px; display: flex; align-items: center; gap: 8px;">
-                        <span>💎</span> No limits. Unlimited referrals. Lifetime commission.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- WITHDRAW TAB -->
-        <div id="withdraw-tab" class="tab-pane hidden">
-            <div class="withdraw-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <div>
-                        <div style="font-size: 14px; color: #8a9aa8;">Available Balance</div>
-                        <div style="font-size: 20px; font-weight: 700; color: white; word-break: break-all;">
-                            <span id="available-balance">0.000000000000000</span> BTC
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 14px; color: #8a9aa8;">≈ USD</div>
-                        <div style="font-size: 20px; font-weight: 600; color: #00c3ff;">
-                            $<span id="available-usd">0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Withdrawal Amount (BTC)</label>
-                    <input type="number" id="withdraw-amount" class="input-field" 
-                           placeholder="0.00100000" step="0.00000001" min="0.001" max="10">
-                    <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                        <span style="font-size: 12px; color: #f7931a;">Minimum: 0.001 BTC</span>
-                        <span style="font-size: 12px; color: #00c3ff; cursor: pointer;" onclick="setMaxWithdraw()">Max</span>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Bitcoin Wallet Address</label>
-                    <input type="text" id="wallet-address" class="input-field" 
-                           placeholder="bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh">
-                </div>
-
-                <div class="fee-info">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Network Fee</span>
-                        <span style="font-weight: 600;">0.0001 BTC</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>You Receive</span>
-                        <span style="font-weight: 600; color: white;" id="receive-amount">-</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="withdraw()" id="withdraw-btn" style="background: linear-gradient(135deg, #f7931a, #e67e22);">
-                    💰 Process Withdrawal
-                </button>
-
-                <!-- WITHDRAWAL HISTORY -->
-                <div style="margin-top: 30px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <span style="font-size: 16px; font-weight: 600; color: white;">Withdrawal History</span>
-                        <span style="font-size: 12px; color: #5a6a78;">Last 30 days</span>
-                    </div>
-                    <div id="history-list">
-                        <div style="text-align: center; padding: 30px; background: rgba(255,255,255,0.02); border-radius: 16px; color: #5a6a78;">
-                            No withdrawal history
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="footer">
-            <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;">
-                <span>⚡ 2H Sessions</span>
-                <span>•</span>
-                <span>💰 Min 0.001 BTC</span>
-                <span>•</span>
-                <span>👥 20% Referral</span>
-                <span>•</span>
-                <span>🔒 USDT Upgrades</span>
-            </div>
-            <div>BTC DK MINING • Professional Mining Interface</div>
-            <div style="margin-top: 8px;">© 2024 • Enterprise Grade</div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        // Telegram Web App initialization
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.expand();
-            tg.ready();
-        }
-
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                const tabId = tab.getAttribute('data-tab');
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.classList.add('hidden');
-                });
-                
-                document.getElementById(`${tabId}-tab`).classList.remove('hidden');
-            });
-        });
-
-        // Copy ETH address
-        function copyAddress() {
-            const address = "0x742d35Cc6634C0532925a3b844Bc9e34F3bA2E1c";
-            navigator.clipboard.writeText(address).then(() => {
-                if (tg) tg.showAlert('✓ Address copied to clipboard');
-            });
-        }
-
-        // Copy referral code
-        function copyReferralCode() {
-            const code = document.getElementById('referral-code')?.textContent || 'BTC-XXXX-XXXX';
-            navigator.clipboard.writeText(code).then(() => {
-                if (tg) tg.showAlert('✓ Referral code copied');
-            });
-        }
-
-        // Copy referral link
-        function copyReferralLink() {
-            const link = document.getElementById('referral-link')?.textContent || '';
-            navigator.clipboard.writeText(link).then(() => {
-                if (tg) tg.showAlert('✓ Referral link copied\nShare with friends to earn 20%');
-            });
-        }
-
-        // Set max withdraw amount
-        function setMaxWithdraw() {
-            const balanceEl = document.getElementById('balance');
-            if (balanceEl) {
-                const balanceText = balanceEl.textContent || '0';
-                const balance = parseFloat(balanceText) || 0;
-                const input = document.getElementById('withdraw-amount');
-                if (input) {
-                    input.value = Math.min(balance, 10).toFixed(8);
-                    updateReceiveAmount();
-                }
-            }
-        }
-
-        // Update receive amount
-        function updateReceiveAmount() {
-            const amount = parseFloat(document.getElementById('withdraw-amount')?.value || '0');
-            const receive = amount - 0.0001;
-            const receiveEl = document.getElementById('receive-amount');
-            if (receiveEl) {
-                receiveEl.textContent = receive > 0 ? receive.toFixed(8) + ' BTC' : '0.00000000 BTC';
-            }
-        }
-
-        // Initialize withdraw amount listener
-        document.addEventListener('DOMContentLoaded', function() {
-            const withdrawInput = document.getElementById('withdraw-amount');
-            if (withdrawInput) {
-                withdrawInput.addEventListener('input', updateReceiveAmount);
-            }
-        });
-    </script>
-</body>
-</html>
