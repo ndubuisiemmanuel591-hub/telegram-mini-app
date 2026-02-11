@@ -285,6 +285,236 @@
             margin-left: 5px;
         }
 
+        /* REFERRAL SECTION - COOL & CALM */
+        .referral-section {
+            background: linear-gradient(135deg, rgba(0, 195, 255, 0.08), rgba(10, 25, 40, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            border-radius: 24px;
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -15px rgba(0, 195, 255, 0.15);
+        }
+
+        .referral-section::before {
+            content: "👥";
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 100px;
+            opacity: 0.03;
+            transform: rotate(-5deg);
+        }
+
+        .referral-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .referral-icon {
+            font-size: 32px;
+            background: rgba(0, 195, 255, 0.1);
+            padding: 12px;
+            border-radius: 18px;
+            line-height: 1;
+            border: 1px solid rgba(0, 195, 255, 0.2);
+        }
+
+        .referral-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .referral-subtitle {
+            font-size: 14px;
+            color: #8a9aa8;
+            margin-top: 4px;
+        }
+
+        .referral-stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .referral-stat-item {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            min-width: 120px;
+        }
+
+        .referral-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00c3ff;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 5px;
+        }
+
+        .referral-stat-label {
+            font-size: 13px;
+            color: #8a9aa8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .referral-stat-small {
+            font-size: 12px;
+            color: #f7931a;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .referral-link-container {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 195, 255, 0.2);
+            border-radius: 100px;
+            padding: 6px 6px 6px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .referral-link-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #8a9aa8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .referral-copy-btn {
+            background: linear-gradient(135deg, #00c3ff, #0099cc);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .referral-copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px rgba(0, 195, 255, 0.4);
+        }
+
+        .referral-share-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .referral-share-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+        }
+
+        .referral-share-btn:hover {
+            background: rgba(0, 195, 255, 0.1);
+            border-color: rgba(0, 195, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .referral-share-btn i {
+            font-size: 18px;
+        }
+
+        .referral-rewards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .referral-reward-item {
+            background: rgba(247, 147, 26, 0.05);
+            border: 1px solid rgba(247, 147, 26, 0.15);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .referral-reward-icon {
+            font-size: 24px;
+            background: rgba(247, 147, 26, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            line-height: 1;
+        }
+
+        .referral-reward-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .referral-reward-info p {
+            font-size: 13px;
+            color: #f7931a;
+            font-weight: 600;
+        }
+
+        .referral-commission-badge {
+            background: rgba(0, 195, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px dashed rgba(0, 195, 255, 0.3);
+        }
+
+        .referral-commission-text {
+            color: #8a9aa8;
+            font-size: 14px;
+        }
+
+        .referral-commission-value {
+            color: #00c3ff;
+            font-weight: 700;
+            font-size: 18px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
         /* MINING TIMER - PREMIUM */
         .mining-timer {
             background: linear-gradient(135deg, rgba(0, 195, 255, 0.1), rgba(247, 147, 26, 0.05));
@@ -640,6 +870,9 @@
             .timer-display { font-size: 32px; }
             .stat-value { font-size: 18px; }
             .total-mined-value { font-size: 14px; }
+            .referral-stats { flex-direction: column; }
+            .referral-rewards { grid-template-columns: 1fr; }
+            .referral-share-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -670,11 +903,12 @@
             </div>
         </div>
 
-        <!-- NAVIGATION -->
+        <!-- NAVIGATION - NOW WITH 4 TABS INCLUDING REFERRAL -->
         <div class="tabs">
-            <button class="tab active" data-tab="mining">Mining</button>
-            <button class="tab" data-tab="upgrade">Upgrade</button>
-            <button class="tab" data-tab="withdraw">Withdraw</button>
+            <button class="tab active" data-tab="mining">⛏️ Mining</button>
+            <button class="tab" data-tab="upgrade">⚡ Upgrade</button>
+            <button class="tab" data-tab="referral">👥 Referral</button>
+            <button class="tab" data-tab="withdraw">💰 Withdraw</button>
         </div>
 
         <!-- MINING TAB -->
@@ -844,6 +1078,135 @@
             </div>
         </div>
 
+        <!-- REFERRAL TAB - COOL & CALM -->
+        <div id="referral-tab" class="tab-pane hidden">
+            <div class="referral-section">
+                <div class="referral-header">
+                    <div class="referral-icon">👥</div>
+                    <div>
+                        <div class="referral-title">Referral Program</div>
+                        <div class="referral-subtitle">Invite friends and earn together</div>
+                    </div>
+                </div>
+
+                <!-- REFERRAL STATS -->
+                <div class="referral-stats">
+                    <div class="referral-stat-item">
+                        <div class="referral-stat-value" id="referral-count">0</div>
+                        <div class="referral-stat-label">Friends Referred</div>
+                        <div class="referral-stat-small">active miners</div>
+                    </div>
+                    <div class="referral-stat-item">
+                        <div class="referral-stat-value" id="referral-earnings">0.00000000</div>
+                        <div class="referral-stat-label">Bonus Earned</div>
+                        <div class="referral-stat-small">BTC</div>
+                    </div>
+                    <div class="referral-stat-item">
+                        <div class="referral-stat-value" id="referral-tier">Bronze</div>
+                        <div class="referral-stat-label">Referral Tier</div>
+                        <div class="referral-stat-small">5% commission</div>
+                    </div>
+                </div>
+
+                <!-- REFERRAL LINK -->
+                <div style="margin: 20px 0 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="font-size: 15px; font-weight: 600; color: white;">Your Referral Link</span>
+                        <span style="font-size: 12px; color: #00c3ff; background: rgba(0,195,255,0.1); padding: 6px 12px; border-radius: 100px;">
+                            ⚡ 5% lifetime commission
+                        </span>
+                    </div>
+                    <div class="referral-link-container">
+                        <span class="referral-link-text" id="referral-link">https://t.me/Btcdkminingbot?start=ref_123456</span>
+                        <button class="referral-copy-btn" onclick="copyReferralLink()">
+                            📋 Copy Link
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SHARE BUTTONS -->
+                <div class="referral-share-buttons">
+                    <button class="referral-share-btn" onclick="shareTelegram()">
+                        <span style="font-size: 18px;">📱</span> Share to Telegram
+                    </button>
+                    <button class="referral-share-btn" onclick="shareWhatsApp()">
+                        <span style="font-size: 18px;">💬</span> Share to WhatsApp
+                    </button>
+                    <button class="referral-share-btn" onclick="shareInvite()">
+                        <span style="font-size: 18px;">📨</span> Invite Friends
+                    </button>
+                </div>
+
+                <!-- REFERRAL REWARDS -->
+                <div style="margin-top: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-size: 16px; font-weight: 600; color: white;">Referral Rewards</span>
+                        <span style="font-size: 13px; color: #8a9aa8;">Tiered bonuses</span>
+                    </div>
+                    
+                    <div class="referral-rewards">
+                        <div class="referral-reward-item">
+                            <div class="referral-reward-icon">🥉</div>
+                            <div class="referral-reward-info">
+                                <h4>Bronze Tier</h4>
+                                <p>1-5 referrals • 5% commission</p>
+                            </div>
+                        </div>
+                        <div class="referral-reward-item">
+                            <div class="referral-reward-icon">🥈</div>
+                            <div class="referral-reward-info">
+                                <h4>Silver Tier</h4>
+                                <p>6-15 referrals • 7% commission</p>
+                            </div>
+                        </div>
+                        <div class="referral-reward-item">
+                            <div class="referral-reward-icon">🥇</div>
+                            <div class="referral-reward-info">
+                                <h4>Gold Tier</h4>
+                                <p>16-30 referrals • 10% commission</p>
+                            </div>
+                        </div>
+                        <div class="referral-reward-item">
+                            <div class="referral-reward-icon">💎</div>
+                            <div class="referral-reward-info">
+                                <h4>Platinum Tier</h4>
+                                <p>31+ referrals • 15% commission</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REFERRAL COMMISSION BADGE -->
+                <div class="referral-commission-badge">
+                    <span class="referral-commission-text">💰 Your current commission rate</span>
+                    <span class="referral-commission-value" id="commission-rate">5%</span>
+                </div>
+
+                <!-- REFERRAL HISTORY PLACEHOLDER -->
+                <div style="margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 15px; font-weight: 600; color: white;">Recent Referrals</span>
+                        <span style="font-size: 12px; color: #8a9aa8;">View all →</span>
+                    </div>
+                    <div id="referral-history" style="background: rgba(0,0,0,0.2); border-radius: 16px; padding: 20px; text-align: center; color: #5a6a78;">
+                        <span style="font-size: 14px;">No referrals yet. Share your link to start earning!</span>
+                    </div>
+                </div>
+
+                <!-- REFERRAL INFO NOTE -->
+                <div style="margin-top: 20px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 16px; border-left: 4px solid #00c3ff;">
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                        <span style="color: #00c3ff; font-size: 20px;">ℹ️</span>
+                        <div>
+                            <p style="color: #8a9aa8; font-size: 13px; margin-bottom: 5px;">
+                                <strong style="color: white;">How it works:</strong> When a friend joins using your link and starts mining, you earn 5-15% commission on their mining rewards. Bonuses are credited instantly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- WITHDRAW TAB -->
         <div id="withdraw-tab" class="tab-pane hidden">
             <div class="withdraw-section">
@@ -915,6 +1278,8 @@
                 <span>•</span>
                 <span>💰 Min 0.001 BTC</span>
                 <span>•</span>
+                <span>👥 Referral 5-15%</span>
+                <span>•</span>
                 <span>🔒 USDT Upgrades</span>
             </div>
             <div>BTC DK MINING • Professional Mining Interface</div>
@@ -935,6 +1300,38 @@
                     window.Telegram.WebApp.showAlert('✓ Address copied to clipboard');
                 }
             });
+        }
+
+        // Copy referral link
+        function copyReferralLink() {
+            const link = document.getElementById('referral-link').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.showAlert('✓ Referral link copied!\n\nShare with friends to earn 5-15% commission.');
+                }
+            });
+        }
+
+        // Share to Telegram
+        function shareTelegram() {
+            const link = document.getElementById('referral-link').textContent;
+            const text = encodeURIComponent('⚡ Join me on BTC DK Mining and earn Bitcoin! Start with 0.000000000000001 BTC per cycle. Use my referral link:');
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
+        }
+
+        // Share to WhatsApp
+        function shareWhatsApp() {
+            const link = document.getElementById('referral-link').textContent;
+            const text = encodeURIComponent(`⚡ BTC DK Mining - Earn Bitcoin by mining!\n\nStart with 0.000000000000001 BTC per cycle.\n\nReferral link: ${link}\n\nJoin now and get 5-15% commission on referrals!`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        // Share invite
+        function shareInvite() {
+            const link = document.getElementById('referral-link').textContent;
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.showAlert(`📨 Share your referral link:\n\n${link}\n\nEarn 5-15% commission on friends' mining rewards!`);
+            }
         }
 
         // Set max withdraw amount
